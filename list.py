@@ -11,6 +11,8 @@ urls = ["https://en.wikipedia.org/wiki/Category:Super_Nintendo_Entertainment_Sys
         "https://en.wikipedia.org/w/index.php?title=Category:Super_Nintendo_Entertainment_System_games&pagefrom=Super+Bonk#mw-pages",
         "https://en.wikipedia.org/w/index.php?title=Category:Super_Nintendo_Entertainment_System_games&pagefrom=Wwf+Wrestlemania%3A+The+Arcade+Game%0AWWF+WrestleMania%3A+The+Arcade+Game#mw-pages"]
 
+to_be_excluded = ["Wikipedia:", "Help:", "Category:", "List_of_Super_Nintendo_Entertainment_System_games:"]
+
 SNES_games = []
 start = time.time()
 
@@ -19,6 +21,14 @@ for url in urls:
     soup = BeautifulSoup(page.content, 'html.parser')
 
     for element in soup.find_all('a', href=True):
-        SNES_games.append(element['href'])
+        if element['href'][0:6]=='/wiki/': 
+            for exception in to_be_excluded:
+                if exception not in element['href']:
+                    print(element['href'])
+                    #SNES_games.append(element['href'])
 
-print(f'Fetched {len(SNES_games)} games for {round(time.time()-start,1)} seconds')
+
+#for url in SNES_games:
+#    print(url)
+
+print(f'Edited {len(SNES_games)} games for {round(time.time()-start,1)} seconds')
