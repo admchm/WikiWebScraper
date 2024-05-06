@@ -1,3 +1,5 @@
+# introductory samples
+
 from bs4 import BeautifulSoup
 import requests
 
@@ -22,3 +24,7 @@ print(game_title[0].get_text())
 
 #release_date = soup.find_all(class_='infobox_data')
 #print(release_date)
+
+# 3. Searching by CSS selectors
+selectorSpecific = soup.select('body h3 a')
+print(selectorSpecific)
