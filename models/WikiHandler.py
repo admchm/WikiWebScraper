@@ -1,4 +1,4 @@
-from utility import singleton
+from singletons.singleton import singleton
 
 @singleton
 class WikiHandler:

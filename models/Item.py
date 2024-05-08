@@ -69,3 +69,8 @@ class Item:
 # NA exclusive day & month & year release
 # PAL exclusive day & month & year release
 # make sure that multiplatforms are also working correctly with specific format days
+
+#TODO: - potential problem with urls that contain ' character
+#TODO: - change back to the url variable; 
+#TODO: - if only one platform exist under the release with only one region, the date won't be working correctly. Examples: https://en.wikipedia.org/wiki/Shiroi_Ringu_he or https://en.wikipedia.org/wiki/Super_R.B.I._Baseball
+#TODO: - for some links, wrong platform is taken into consideration - https://en.wikipedia.org/wiki/Chrono_Trigger
