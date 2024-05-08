@@ -16,23 +16,62 @@ class Item:
         print(f'PAL release: {self.release_PAL}')
         print(f'JP release: {self.release_JP}')
             
-    def get_dates(self):
-        self.handle_NA_release()
+    def get_dates(self, text):
+        self.handle_NA_release(text)
         self.handle_PAL_release()
         self.handle_JP_release()        
     
-    def handle_NA_release(self):
-        self.release_NA = "01.01.1991"
+    def handle_NA_release(self, text):
+        # NA non-exclusive day & month & year release - done https://en.wikipedia.org/wiki/ClayFighter_(video_game)
+        # NA exclusive day & month & year release
+        # NA exclusive month & year release - done https://en.wikipedia.org/wiki/Super_R.B.I._Baseball
+        # NA exclusive single year release - done https://en.wikipedia.org/wiki/Super_3D_Noah%27s_Ark
+        
+        #self.release_NA = "01.01.1991"
+        #pattern = r'(Super NES|SNES)[^G]+NA:\s*([A-Z][a-z]+ \d{1,2}, \d{4})'
+        
+        pattern = r'ReleaseSuper NESNA:\s*([A-Z][a-z]+ \d{1,2}, \d{4})'
+        date = re.search(pattern, text)
+        if date:
+            self.release_NA = date.group(1)
+        
+        pattern = r'\b([A-Z][a-z]+ \d{4})\b'
+        date = re.search(pattern, text)
+        print(date)
+        
+        if date:
+            self.release_NA = date.group(1)
+            
+        pattern = r'ReleaseSNESNA:\s*(\d{4})'
+        date = re.search(pattern, text)
+        print(date)
+        
+        if date:
+            self.release_NA = date.group(1)
+        
         
     def handle_PAL_release(self):
-        self.release_PAL = "01.02.1992"
+        # PAL exclusive single year release
+        # PAL exclusive month & year release
+        # PAL exclusive day & month & year release
+        self.release_PAL = "———"
         
     def handle_JP_release(self):
-        self.release_JP = "03.07.2001"
+        # JP exclusive day & month & year release - https://en.wikipedia.org/wiki/Zenkoku_Kōkō_Soccer
+        # JP exclusive month & year release
+        # JP exclusive single year release
+        self.release_JP = "———"
+        
+        
+        
+        
+        
+        
         
     #TODO: - combine function for getting release dates for three regions, for now it's duplicated
     def getNorthAmericaReleaseDate(text):
-        pattern = r'Super NES[^G]+NA:\s*([A-Z][a-z]+ \d{1,2}, \d{4})'
+        #pattern = r'Super NES[^G]+NA:\s*([A-Z][a-z]+ \d{1,2}, \d{4})'
+        pattern = r'(Super NES|SNES)[^G]+NA:\s*([A-Z][a-z]+ \d{1,2}, \d{4})'
         date = re.search(pattern, text)
 
         if date:
@@ -74,15 +113,6 @@ class Item:
 
 
 # cases to handle:
-# JP exclusive single year release
-# NA exclusive single year release
-# PAL exclusive single year release
-# JP exclusive month & year release
-# NA exclusive month & year release
-# PAL exclusive month & year release
-# JP exclusive day & month & year release
-# NA exclusive day & month & year release
-# PAL exclusive day & month & year release
 # make sure that multiplatforms are also working correctly with specific format days
 
 #TODO: - potential problem with urls that contain ' character
