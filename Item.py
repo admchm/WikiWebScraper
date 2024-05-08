@@ -1,7 +1,7 @@
 import re
 
 class Item:
-    def __init__(self, title, platform, release_NA, release_PAL, release_JP):
+    def __init__(self, title, platform, release_NA="———", release_PAL="———", release_JP="———"):
         self.title = title
         self.platform = platform
         self.release_NA = release_NA

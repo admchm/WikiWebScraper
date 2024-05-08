@@ -2,6 +2,8 @@ import time
 import requests
 from bs4 import BeautifulSoup
 
+from Item import Item
+
 def keyword_not_forbidden(url):
     forbidden_keyword = ["Wikipedia:", "Help:", "Category", "Special:", "Portal:", "Main_Page", "Nintendo_Entertainment"]
     
@@ -35,9 +37,9 @@ for url in urls:
     
     #getting correct and full name
     table_content = result[0].contents[0]
-    res = table_content.contents[0].get_text()
-    print(res)
+    single_item = table_content.contents[0].get_text()
     
+    single_item = Item(title = single_item, platform = "SNES")
     #getting release dates
     table_content = result[0].contents[0]
     
