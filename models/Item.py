@@ -25,7 +25,14 @@ class Item:
         #removing square brackets with its content
         trimmed_text = re.sub(r'\[\d+\]', '', trimmed_text)
 
-        print(trimmed_text)
+        #changing "Release" for "SNES" so it could be processed; It might be problematic, so testing might be needed
+        trimmed_text = re.sub(r'Release', 'Super NES', trimmed_text)
+
+        # adding missing day if needed
+        trimmed_text = re.sub(r'(January|February|March|April|May|June|July|August|September|October|November|December)(?=\s+\d{4})', r'\1 01,', trimmed_text)
+        
+        #TODO: - adding missing day and year if needed
+        #trimmed_text = re.sub(r'(?<!\d)(?<!\w)(\d{4})(?!\d)', r'December 01, \1', trimmed_text) - not working correctly, but could be fixed
     
         pattern = r"(Super NES|SNES|Super Famicom)(?:((?:JP|NA|PAL|EU): \w+ \d{1,2}, \d{4}))+"
         matches = re.finditer(pattern, trimmed_text)
@@ -36,6 +43,7 @@ class Item:
             data_matches = re.findall(r"(JP|NA|PAL|EU): (\w+ \d{1,2}, \d{4})", match.group(0))
             results[console_name] = data_matches
 
+            
         for console, dates in results.items():
             print(f"{console}:")
             for region, date in dates:

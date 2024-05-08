@@ -19,7 +19,8 @@ for url in urls:
     # https://en.wikipedia.org/wiki/Frogger - takes the date from JP region
     # https://en.wikipedia.org/wiki/Final_Fight_3 - single dates to test
     # https://en.wikipedia.org/wiki/The_Mask_(video_game)
-    page = requests.get('https://en.wikipedia.org/wiki/Mortal_Kombat_3')
+    #page = requests.get('https://en.wikipedia.org/wiki/Chrono_Trigger')
+    page = requests.get('https://en.wikipedia.org/wiki/The_Firemen')
     soup = BeautifulSoup(page.content, 'html.parser')
 
     result = soup.find_all(class_='infobox ib-video-game hproduct')
@@ -30,13 +31,6 @@ for url in urls:
     #print(table_content.get_text())
     
     single_item.prepare_dates(table_content.get_text())
-    
-    # https://en.wikipedia.org/wiki/Frogger
-    # <a href="/wiki/North_America" title="North America">NA</a>:</span> September 1981
-    
-    # https://en.wikipedia.org/wiki/Chrono_Trigger
-    #<b>Super NES</b><link href="mw-data:TemplateStyles:r1126788409" rel="mw-deduplicated-inline-style"/><div class="plainlist"><ul><li><span style="font-size:97%;"><a href="/wiki/Japan" title="Japan">JP</a>:</span> March 11, 1995</li><li><span style="font-size:97%;"><a href="/wiki/North_America" title="North America">NA</a>:</span> August 11, 1995</li></ul></div>
-    
      
     # for child in table_content:
     #    #getting release dates
