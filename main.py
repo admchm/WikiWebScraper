@@ -17,7 +17,9 @@ for url in urls:
     # https://en.wikipedia.org/wiki/Chrono_Trigger - doesn't work
     # https://en.wikipedia.org/wiki/The_Firemen - wrong date (not released in NA)
     # https://en.wikipedia.org/wiki/Frogger - takes the date from JP region
-    page = requests.get('https://en.wikipedia.org/wiki/Frogger')
+    # https://en.wikipedia.org/wiki/Final_Fight_3 - single dates to test
+    # https://en.wikipedia.org/wiki/The_Mask_(video_game)
+    page = requests.get('https://en.wikipedia.org/wiki/Mortal_Kombat_3')
     soup = BeautifulSoup(page.content, 'html.parser')
 
     result = soup.find_all(class_='infobox ib-video-game hproduct')
@@ -27,26 +29,7 @@ for url in urls:
     single_item = Item(title = table_content.contents[0].get_text(), platform = "SNES")
     #print(table_content.get_text())
     
-    #getting all release dates for all platforms
-    trimmed_text = re.sub(r'.*?(?=Super NES|SNES|Super Famicom)', '', table_content.get_text(), flags=re.S)
-    trimmed_text = re.sub(r'.*?(?=Release)', '', trimmed_text, flags=re.S)
-    trimmed_text = re.sub(r'Genre.*$', '', trimmed_text, flags=re.S)
-    
-    print(trimmed_text)
-    
-    pattern = r"(Super NES|SNES|Super Famicom)(?:((?:JP|NA|PAL): \w+ \d{1,2}, \d{4}))+"
-    matches = re.finditer(pattern, trimmed_text)
-
-    results = {}
-    for match in matches:
-        console_name = match.group(1)
-        data_matches = re.findall(r"(JP|NA|PAL): (\w+ \d{1,2}, \d{4})", match.group(0))
-        results[console_name] = data_matches
-
-    for console, dates in results.items():
-        print(f"{console}:")
-        for region, date in dates:
-            print(f"  {region}: {date}")
+    single_item.prepare_dates(table_content.get_text())
     
     # https://en.wikipedia.org/wiki/Frogger
     # <a href="/wiki/North_America" title="North America">NA</a>:</span> September 1981

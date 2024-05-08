@@ -15,6 +15,31 @@ class Item:
         print(f'NA release: {self.release_NA}')
         print(f'PAL release: {self.release_PAL}')
         print(f'JP release: {self.release_JP}')
+    
+    def prepare_dates(self, data_from_wiki):
+        #getting all release dates for all platforms
+        trimmed_text = re.sub(r'.*?(?=Super NES|SNES|Super Famicom)', '', data_from_wiki, flags=re.S)
+        trimmed_text = re.sub(r'.*?(?=Release)', '', trimmed_text, flags=re.S)
+        trimmed_text = re.sub(r'Genre.*$', '', trimmed_text, flags=re.S)
+        
+        #removing square brackets with its content
+        trimmed_text = re.sub(r'\[\d+\]', '', trimmed_text)
+
+        print(trimmed_text)
+    
+        pattern = r"(Super NES|SNES|Super Famicom)(?:((?:JP|NA|PAL|EU): \w+ \d{1,2}, \d{4}))+"
+        matches = re.finditer(pattern, trimmed_text)
+
+        results = {}
+        for match in matches:
+            console_name = match.group(1)
+            data_matches = re.findall(r"(JP|NA|PAL|EU): (\w+ \d{1,2}, \d{4})", match.group(0))
+            results[console_name] = data_matches
+
+        for console, dates in results.items():
+            print(f"{console}:")
+            for region, date in dates:
+                print(f"  {region}: {date}")
             
     def get_dates(self, text):
         self.handle_NA_release(text)
