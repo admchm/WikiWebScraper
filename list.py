@@ -3,6 +3,17 @@ import requests
 import re
 from bs4 import BeautifulSoup
 
+# cases to handle:
+# JP exclusive single year release
+# NA exclusive single year release
+# PAL exclusive single year release
+# JP exclusive month & year release
+# NA exclusive month & year release
+# PAL exclusive month & year release
+# JP exclusive day & month & year release
+# NA exclusive day & month & year release
+# PAL exclusive day & month & year release
+
 def keyword_not_forbidden(url):
     forbidden_keyword = ["Wikipedia:", "Help:", "Category", "Special:", "Portal:", "Main_Page", "Nintendo_Entertainment"]
     
@@ -20,7 +31,13 @@ def getNorthAmericaReleaseDate(text):
     if date:
         print(f"NA release: {date.group(1)}")
     else:
-        print("No date found for Super NES NA release.")
+        pattern = r'\b([A-Z][a-z]+ \d{4})\b' #TODO: works only for single month
+        date = re.search(pattern, text)
+        print(text)
+        if date:
+            print(f"NA release: {date.group(1)}")
+        else:
+            print("No date found for NA release.")
 
 def getJapanReleaseDate(text):
     pattern = r'Super NESJP:\s*([A-Z][a-z]+ \d{1,2}, \d{4})'
@@ -37,7 +54,7 @@ def getJapanReleaseDate(text):
         if date:
             print(f"JP release: {date.group(1)}")
         else:
-            print("No date found.")
+            print("No date found for JP release.")
 
 def getEuropeReleaseDate(text):
     pattern = r'Super NES[^G]+EU:\s*([A-Z][a-z]+ \d{1,2}, \d{4})'
@@ -64,7 +81,7 @@ for url in urls:
     #TODO: - change back to the url variable; 
     #TODO: - if only one platform exist under the release with only one region, the date won't be working correctly. Examples: https://en.wikipedia.org/wiki/Shiroi_Ringu_he or https://en.wikipedia.org/wiki/Super_R.B.I._Baseball
     #TODO: - for some links, wrong platform is taken into consideration - https://en.wikipedia.org/wiki/Chrono_Trigger
-    page = requests.get('https://en.wikipedia.org/wiki/Shiroi_Ringu_he') 
+    page = requests.get('https://en.wikipedia.org/wiki/Super_R.B.I._Baseball') 
     soup = BeautifulSoup(page.content, 'html.parser')
 
     result = soup.find_all(class_='infobox ib-video-game hproduct')
