@@ -23,23 +23,21 @@ def getNorthAmericaReleaseDate(text):
         print("No date found for Super NES NA release.")
 
 def getJapanReleaseDate(text):
-    #print(text)
     pattern = r'Super NESJP:\s*([A-Z][a-z]+ \d{1,2}, \d{4})'
     date = re.search(pattern, text)
 
-    print(date)
     if date:
         print(f"JP release: {date.group(1)}")
     else:
-        print("No date found for Super NES JP release.")
-        #if won't be found, look for "Super Famicom"
-        pattern = r'Super Famicom[^G]+JP:\s*([A-Z][a-z]+ \d{1,2}, \d{4})'
+        #print("No date found for Super NES JP release.")
+        #if won't be found, look for default date
+        pattern = r'\b([A-Z][a-z]+ \d{1,2}, \d{4})\b'
         date = re.search(pattern, text)
 
         if date:
-            print(f"Famicom JP release: {date.group(1)}")
+            print(f"JP release: {date.group(1)}")
         else:
-            print("No date found for Super Famicom JP release.")
+            print("No date found.")
 
 def getEuropeReleaseDate(text):
     pattern = r'Super NES[^G]+EU:\s*([A-Z][a-z]+ \d{1,2}, \d{4})'
@@ -66,7 +64,7 @@ for url in urls:
     #TODO: - change back to the url variable; 
     #TODO: - if only one platform exist under the release with only one region, the date won't be working correctly. Examples: https://en.wikipedia.org/wiki/Shiroi_Ringu_he or https://en.wikipedia.org/wiki/Super_R.B.I._Baseball
     #TODO: - for some links, wrong platform is taken into consideration - https://en.wikipedia.org/wiki/Chrono_Trigger
-    page = requests.get('https://en.wikipedia.org/wiki/Yoshi%27s_Island') 
+    page = requests.get('https://en.wikipedia.org/wiki/Shiroi_Ringu_he') 
     soup = BeautifulSoup(page.content, 'html.parser')
 
     result = soup.find_all(class_='infobox ib-video-game hproduct')
