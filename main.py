@@ -20,8 +20,11 @@ for url in urls:
     #getting correct and full name
     table_content = result[0].contents[0]    
     single_item = Item(title = table_content.contents[0].get_text(), platform = "SNES")
-    #single_item.show_item_details()
+    
     #getting release dates
+    single_item.get_dates()
+    single_item.show_item_details()
+    
     
     for child in table_content:
         #print(child.get_text())
@@ -29,6 +32,9 @@ for url in urls:
             #print(child.get_text())
             #TODO: - if platform won't be visible, assume it was released only for one platform 
             if "Super NES" in child.get_text():
+                
+                #single_item.get_dates()
+                
                 #multiplatform
                 print("")
                 #result = getNorthAmericaReleaseDate(child.get_text())

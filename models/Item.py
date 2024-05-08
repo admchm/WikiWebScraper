@@ -1,4 +1,5 @@
 import re
+from typing import Self
 
 class Item:
     def __init__(self, title, platform, release_NA="———", release_PAL="———", release_JP="———"):
@@ -11,10 +12,24 @@ class Item:
     def show_item_details(self):
         print(f'Title: {self.title}')
         print(f'Platform: {self.platform}')
-        print(f'NA release: {self.title}')
-        print(f'PAL release: {self.title}')
-        print(f'JP release: {self.title}')
-
+        print(f'NA release: {self.release_NA}')
+        print(f'PAL release: {self.release_PAL}')
+        print(f'JP release: {self.release_JP}')
+            
+    def get_dates(self):
+        self.handle_NA_release()
+        self.handle_PAL_release()
+        self.handle_JP_release()        
+    
+    def handle_NA_release(self):
+        self.release_NA = "01.01.1991"
+        
+    def handle_PAL_release(self):
+        self.release_PAL = "01.02.1992"
+        
+    def handle_JP_release(self):
+        self.release_JP = "03.07.2001"
+        
     #TODO: - combine function for getting release dates for three regions, for now it's duplicated
     def getNorthAmericaReleaseDate(text):
         pattern = r'Super NES[^G]+NA:\s*([A-Z][a-z]+ \d{1,2}, \d{4})'
