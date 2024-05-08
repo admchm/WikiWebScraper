@@ -14,13 +14,15 @@ start = time.time()
 urls = WikiHandler().urls
 
 for url in urls:
-    # https://en.wikipedia.org/wiki/Chrono_Trigger - doesn't work
-    # https://en.wikipedia.org/wiki/The_Firemen - wrong date (not released in NA)
-    # https://en.wikipedia.org/wiki/Frogger - takes the date from JP region
-    # https://en.wikipedia.org/wiki/Final_Fight_3 - single dates to test
-    # https://en.wikipedia.org/wiki/The_Mask_(video_game)
-    #page = requests.get('https://en.wikipedia.org/wiki/Chrono_Trigger')
-    page = requests.get('https://en.wikipedia.org/wiki/The_Firemen')
+    #TODO: - potential problem with urls that contain ' character
+    
+    #page = requests.get('https://en.wikipedia.org/wiki/The_Firemen')
+    #page = requests.get('https://en.wikipedia.org/wiki/Shiroi_Ringu_he')
+    #page = requests.get('https://en.wikipedia.org/wiki/Frogger')
+    #page = requests.get('https://en.wikipedia.org/wiki/The_Mask_(video_game)')
+    #page = requests.get('https://en.wikipedia.org/wiki/Super_R.B.I._Baseball')
+    page = requests.get('https://en.wikipedia.org/wiki/Chrono_Trigger')
+    #page = requests.get('https://en.wikipedia.org/wiki/Super_3D_Noah%27s_Ark') - #TODO: - problematic, because it has strange date format
     soup = BeautifulSoup(page.content, 'html.parser')
 
     result = soup.find_all(class_='infobox ib-video-game hproduct')

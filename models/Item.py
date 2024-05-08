@@ -22,6 +22,10 @@ class Item:
         trimmed_text = re.sub(r'.*?(?=Release)', '', trimmed_text, flags=re.S)
         trimmed_text = re.sub(r'Genre.*$', '', trimmed_text, flags=re.S)
         
+        print(trimmed_text)
+        #if month was written like May-June, we're going to take the first part into consideration
+        trimmed_text = re.sub(r'(January|February|March|April|May|June|July|August|September|October|November|December)-\w+\s+(\d{4})', r'\1 \2', trimmed_text)
+        
         #removing square brackets with its content
         trimmed_text = re.sub(r'\[\d+\]', '', trimmed_text)
 
@@ -33,6 +37,7 @@ class Item:
         
         #TODO: - adding missing day and year if needed
         #trimmed_text = re.sub(r'(?<!\d)(?<!\w)(\d{4})(?!\d)', r'December 01, \1', trimmed_text) - not working correctly, but could be fixed
+        #trimmed_text = re.sub(r'(?<!\d)(\d{4})(?!\d)', r'December 01, \1', trimmed_text) - should be working ok
     
         pattern = r"(Super NES|SNES|Super Famicom)(?:((?:JP|NA|PAL|EU): \w+ \d{1,2}, \d{4}))+"
         matches = re.finditer(pattern, trimmed_text)
@@ -143,12 +148,3 @@ class Item:
             print(f"PAL release: {date.group(1)}")
         else:
             print("No date found for Super NES EU release.")
-
-
-# cases to handle:
-# make sure that multiplatforms are also working correctly with specific format days
-
-#TODO: - potential problem with urls that contain ' character
-#TODO: - change back to the url variable; 
-#TODO: - if only one platform exist under the release with only one region, the date won't be working correctly. Examples: https://en.wikipedia.org/wiki/Shiroi_Ringu_he or https://en.wikipedia.org/wiki/Super_R.B.I._Baseball
-#TODO: - for some links, wrong platform is taken into consideration - https://en.wikipedia.org/wiki/Chrono_Trigger
