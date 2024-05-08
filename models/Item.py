@@ -22,7 +22,7 @@ class Item:
         trimmed_text = re.sub(r'.*?(?=Release)', '', trimmed_text, flags=re.S)
         trimmed_text = re.sub(r'Genre.*$', '', trimmed_text, flags=re.S)
         
-        print(trimmed_text)
+        #print(trimmed_text)
         #if month was written like May-June, we're going to take the first part into consideration
         trimmed_text = re.sub(r'(January|February|March|April|May|June|July|August|September|October|November|December)-\w+\s+(\d{4})', r'\1 \2', trimmed_text)
         
@@ -48,103 +48,21 @@ class Item:
             data_matches = re.findall(r"(JP|NA|PAL|EU): (\w+ \d{1,2}, \d{4})", match.group(0))
             results[console_name] = data_matches
 
+        self.set_dates(results)  
+        # for console, dates in results.items():
+        #     print(f"{console}:")
+        #     for region, date in dates:
+        #         print(f"  {region}: {date}")
             
+    def set_dates(self, results):
         for console, dates in results.items():
-            print(f"{console}:")
+            #print(results.item)
+            #print(f"{console}:")
             for region, date in dates:
-                print(f"  {region}: {date}")
-            
-    def get_dates(self, text):
-        self.handle_NA_release(text)
-        self.handle_PAL_release()
-        self.handle_JP_release()        
-    
-    def handle_NA_release(self, text):
-        # NA non-exclusive day & month & year release - done https://en.wikipedia.org/wiki/ClayFighter_(video_game)
-        # NA exclusive day & month & year release
-        # NA exclusive month & year release - done https://en.wikipedia.org/wiki/Super_R.B.I._Baseball
-        # NA exclusive single year release - done https://en.wikipedia.org/wiki/Super_3D_Noah%27s_Ark
-        
-        #self.release_NA = "01.01.1991"
-        #pattern = r'(Super NES|SNES)[^G]+NA:\s*([A-Z][a-z]+ \d{1,2}, \d{4})'
-        
-        pattern = r'ReleaseSuper NESNA:\s*([A-Z][a-z]+ \d{1,2}, \d{4})'
-        date = re.search(pattern, text)
-        if date:
-            self.release_NA = date.group(1)
-        
-        pattern = r'\b([A-Z][a-z]+ \d{4})\b'
-        date = re.search(pattern, text)
-        print(date)
-        
-        if date:
-            self.release_NA = date.group(1)
-            
-        pattern = r'ReleaseSNESNA:\s*(\d{4})'
-        date = re.search(pattern, text)
-        print(date)
-        
-        if date:
-            self.release_NA = date.group(1)
-        
-        
-    def handle_PAL_release(self):
-        # PAL exclusive single year release
-        # PAL exclusive month & year release
-        # PAL exclusive day & month & year release
-        self.release_PAL = "———"
-        
-    def handle_JP_release(self):
-        # JP exclusive day & month & year release - https://en.wikipedia.org/wiki/Zenkoku_Kōkō_Soccer
-        # JP exclusive month & year release
-        # JP exclusive single year release
-        self.release_JP = "———"
-        
-        
-        
-        
-        
-        
-        
-    #TODO: - combine function for getting release dates for three regions, for now it's duplicated
-    def getNorthAmericaReleaseDate(text):
-        #pattern = r'Super NES[^G]+NA:\s*([A-Z][a-z]+ \d{1,2}, \d{4})'
-        pattern = r'(Super NES|SNES)[^G]+NA:\s*([A-Z][a-z]+ \d{1,2}, \d{4})'
-        date = re.search(pattern, text)
-
-        if date:
-            print(f"NA release: {date.group(1)}")
-        else:
-            pattern = r'\b([A-Z][a-z]+ \d{4})\b' #TODO: works only for single month
-            date = re.search(pattern, text)
-            print(text)
-            if date:
-                print(f"NA release: {date.group(1)}")
-            else:
-                print("No date found for NA release.")
-
-    def getJapanReleaseDate(text):
-        pattern = r'Super NESJP:\s*([A-Z][a-z]+ \d{1,2}, \d{4})'
-        date = re.search(pattern, text)
-
-        if date:
-            print(f"JP release: {date.group(1)}")
-        else:
-            #print("No date found for Super NES JP release.")
-            #if won't be found, look for default date
-            pattern = r'\b([A-Z][a-z]+ \d{1,2}, \d{4})\b'
-            date = re.search(pattern, text)
-
-            if date:
-                print(f"JP release: {date.group(1)}")
-            else:
-                print("No date found for JP release.")
-
-    def getEuropeReleaseDate(text):
-        pattern = r'Super NES[^G]+EU:\s*([A-Z][a-z]+ \d{1,2}, \d{4})'
-        date = re.search(pattern, text)
-
-        if date:
-            print(f"PAL release: {date.group(1)}")
-        else:
-            print("No date found for Super NES EU release.")
+                print(region, date)
+                if region == "NA":
+                    self.release_NA = date
+                elif region == "JP":
+                    self.release_JP = date
+                else:
+                    self.release_PAL = date

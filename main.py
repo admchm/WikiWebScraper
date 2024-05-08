@@ -14,15 +14,13 @@ start = time.time()
 urls = WikiHandler().urls
 
 for url in urls:
-    #TODO: - potential problem with urls that contain ' character
-    
     #page = requests.get('https://en.wikipedia.org/wiki/The_Firemen')
     #page = requests.get('https://en.wikipedia.org/wiki/Shiroi_Ringu_he')
     #page = requests.get('https://en.wikipedia.org/wiki/Frogger')
     #page = requests.get('https://en.wikipedia.org/wiki/The_Mask_(video_game)')
     #page = requests.get('https://en.wikipedia.org/wiki/Super_R.B.I._Baseball')
-    page = requests.get('https://en.wikipedia.org/wiki/Chrono_Trigger')
-    #page = requests.get('https://en.wikipedia.org/wiki/Super_3D_Noah%27s_Ark') - #TODO: - problematic, because it has strange date format
+    #page = requests.get('https://en.wikipedia.org/wiki/Chrono_Trigger')
+    #page = requests.get('https://en.wikipedia.org/wiki/Super_3D_Noah%27s_Ark') #- TODO: - problematic, because it has strange date format
     soup = BeautifulSoup(page.content, 'html.parser')
 
     result = soup.find_all(class_='infobox ib-video-game hproduct')
@@ -30,9 +28,9 @@ for url in urls:
     #getting correct and full name
     table_content = result[0].contents[0]    
     single_item = Item(title = table_content.contents[0].get_text(), platform = "SNES")
-    #print(table_content.get_text())
     
     single_item.prepare_dates(table_content.get_text())
+    single_item.show_item_details()
      
     # for child in table_content:
     #    #getting release dates
