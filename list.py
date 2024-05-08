@@ -1,18 +1,6 @@
 import time
 import requests
-import re
 from bs4 import BeautifulSoup
-
-# cases to handle:
-# JP exclusive single year release
-# NA exclusive single year release
-# PAL exclusive single year release
-# JP exclusive month & year release
-# NA exclusive month & year release
-# PAL exclusive month & year release
-# JP exclusive day & month & year release
-# NA exclusive day & month & year release
-# PAL exclusive day & month & year release
 
 def keyword_not_forbidden(url):
     forbidden_keyword = ["Wikipedia:", "Help:", "Category", "Special:", "Portal:", "Main_Page", "Nintendo_Entertainment"]
@@ -22,48 +10,6 @@ def keyword_not_forbidden(url):
             return True
             
     return False
-
-#TODO: - combine function for getting release dates for three regions, for now it's duplicated
-def getNorthAmericaReleaseDate(text):
-    pattern = r'Super NES[^G]+NA:\s*([A-Z][a-z]+ \d{1,2}, \d{4})'
-    date = re.search(pattern, text)
-
-    if date:
-        print(f"NA release: {date.group(1)}")
-    else:
-        pattern = r'\b([A-Z][a-z]+ \d{4})\b' #TODO: works only for single month
-        date = re.search(pattern, text)
-        print(text)
-        if date:
-            print(f"NA release: {date.group(1)}")
-        else:
-            print("No date found for NA release.")
-
-def getJapanReleaseDate(text):
-    pattern = r'Super NESJP:\s*([A-Z][a-z]+ \d{1,2}, \d{4})'
-    date = re.search(pattern, text)
-
-    if date:
-        print(f"JP release: {date.group(1)}")
-    else:
-        #print("No date found for Super NES JP release.")
-        #if won't be found, look for default date
-        pattern = r'\b([A-Z][a-z]+ \d{1,2}, \d{4})\b'
-        date = re.search(pattern, text)
-
-        if date:
-            print(f"JP release: {date.group(1)}")
-        else:
-            print("No date found for JP release.")
-
-def getEuropeReleaseDate(text):
-    pattern = r'Super NES[^G]+EU:\s*([A-Z][a-z]+ \d{1,2}, \d{4})'
-    date = re.search(pattern, text)
-
-    if date:
-        print(f"PAL release: {date.group(1)}")
-    else:
-        print("No date found for Super NES EU release.")
 
 urls = [#"https://en.wikipedia.org/wiki/Category:Super_Nintendo_Entertainment_System_games", 
         #"https://en.wikipedia.org/w/index.php?title=Category:Super_Nintendo_Entertainment_System_games&pagefrom=Donkey+Kong+Country+2%3A+Diddy%27s+Kong+Quest#mw-pages",
