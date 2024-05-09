@@ -45,6 +45,7 @@ class Item:
         months = "(January|February|March|April|May|June|July|August|September|October|November|December)"
         pattern = fr"(JP: |PAL: |EU: |NA: )?{months}"
         trimmed_text = re.sub(pattern, lambda m: f"{m.group(1) if m.group(1) else 'NA: '}{m.group(2)}", trimmed_text)
+        trimmed_text = re.sub(r':NA', 'NA', trimmed_text)    
         
         #if region is preceeded by :
         trimmed_text = re.sub(r":(JP|PAL|EU|NA)\b", r"\1", trimmed_text)
@@ -52,8 +53,11 @@ class Item:
         #if region is preceeded by space
         trimmed_text = re.sub(r'\s*(JP|NA|EU|PAL):', r'\1:', trimmed_text)
         
-        print(trimmed_text)
+        #swap Super NES, SNES, Famicom etc. to SNES
+        pattern = r'(:?\s*:?)(Super NES|SNES|Super Nintendo|Super Famicom)(:?\s*:)'
+        trimmed_text = re.sub(pattern, 'SNES', trimmed_text)
         
+        #use only SNES, because text will be altered to that keyword
         pattern = r"(Super NES|SNES|Super Famicom)(?:((?:JP|NA|PAL|EU): \w+ \d{1,2}, \d{4}))+"
         matches = re.finditer(pattern, trimmed_text)
 
