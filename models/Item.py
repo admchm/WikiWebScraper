@@ -31,12 +31,29 @@ class Item:
         #changing "Release" for "SNES" so it could be processed
         trimmed_text = re.sub(r'Release', 'Super NES', trimmed_text)
         
+        pattern = r'(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)'
+        trimmed_text = re.sub(pattern, lambda x: f"{x.group(2)} {x.group(1)},", trimmed_text)
+        #print(trimmed_text)
+        
         # adding missing day if needed
         trimmed_text = re.sub(r'(January|February|March|April|May|June|July|August|September|October|November|December)(?=\s+\d{4})', r'\1 01,', trimmed_text)
         
         #adding missing day and year if needed
         trimmed_text = re.sub(r'(?<!\d, )(?!January|February|March|April|May|June|July|August|September|October|November|December)(?<!\d)(\d{4})(?!\d)', r'December 01, \1', trimmed_text)
-    
+        
+        #if region prefix is completely missing, add NA:
+        months = "(January|February|March|April|May|June|July|August|September|October|November|December)"
+        pattern = fr"(JP: |PAL: |EU: |NA: )?{months}"
+        trimmed_text = re.sub(pattern, lambda m: f"{m.group(1) if m.group(1) else 'NA: '}{m.group(2)}", trimmed_text)
+        
+        #if region is preceeded by :
+        trimmed_text = re.sub(r":(JP|PAL|EU|NA)\b", r"\1", trimmed_text)
+        
+        #if region is preceeded by space
+        trimmed_text = re.sub(r'\s*(JP|NA|EU|PAL):', r'\1:', trimmed_text)
+        
+        print(trimmed_text)
+        
         pattern = r"(Super NES|SNES|Super Famicom)(?:((?:JP|NA|PAL|EU): \w+ \d{1,2}, \d{4}))+"
         matches = re.finditer(pattern, trimmed_text)
 
