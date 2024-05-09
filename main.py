@@ -20,7 +20,8 @@ for url in urls:
     #page = requests.get('https://en.wikipedia.org/wiki/The_Mask_(video_game)')
     #page = requests.get('https://en.wikipedia.org/wiki/Super_R.B.I._Baseball')
     #page = requests.get('https://en.wikipedia.org/wiki/Chrono_Trigger')
-    #page = requests.get('https://en.wikipedia.org/wiki/Super_3D_Noah%27s_Ark') #- TODO: - problematic, because it has strange date format
+    #page = requests.get('https://en.wikipedia.org/wiki/Acrobat_Mission')
+    page = requests.get('https://en.wikipedia.org/wiki/Super_3D_Noah%27s_Ark')
     soup = BeautifulSoup(page.content, 'html.parser')
 
     result = soup.find_all(class_='infobox ib-video-game hproduct')
