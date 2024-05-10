@@ -33,6 +33,7 @@ async def main():
     shared = WikiHandler()
     start = time.time()
 
+    print("Processing game data, it might take a while...")
     async with aiohttp.ClientSession() as session:
         tasks = []
         
