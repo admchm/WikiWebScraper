@@ -14,7 +14,7 @@ class WikiHandler:
         "https://en.wikipedia.org/w/index.php?title=Category:Super_Nintendo_Entertainment_System_games&pagefrom=Wwf+Wrestlemania%3A+The+Arcade+Game%0AWWF+WrestleMania%3A+The+Arcade+Game#mw-pages"]
 
     @staticmethod
-    def keyword_not_forbidden(url):
+    def forbidden(url):
         forbidden_keyword = ["Wikipedia:", "Help:", "Category", "Special:", "Portal:", "Main_Page", "Nintendo_Entertainment"]
         
         for keyword in forbidden_keyword:

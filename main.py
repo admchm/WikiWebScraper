@@ -14,10 +14,9 @@ for url in shared.urls:
     soup = BeautifulSoup(page.content, TextRes.get_html_attrib())
 
     for element in soup.find_all('a', href=True):
-        item = element[TextRes.get_href()]
-        if item[0:6]==TextRes.get_wiki_endpoint(): 
-            #TODO: - bad naming convention, to be fixed
-            if not shared.keyword_not_forbidden(item):
+        url_item_name = element[TextRes.get_href()]
+        if url_item_name[0:6]==TextRes.get_wiki_endpoint(): 
+            if not shared.forbidden(url_item_name):
                 url = TextRes.get_wiki_base_adress() + element[TextRes.get_href()]
                 page_details = requests.get(url)
                 soup = BeautifulSoup(page_details.content, TextRes.get_html_attrib())
