@@ -1,7 +1,7 @@
 import re
 
 class Item:
-    def __init__(self, title, platform = "SNES", release_NA="———", release_PAL="———", release_JP="———", game_url=None):
+    def __init__(self, title, platform="SNES", release_NA="———", release_PAL="———", release_JP="———", game_url=None):
         self.title = title
         self.platform = platform
         self.release_NA = release_NA
@@ -17,67 +17,70 @@ class Item:
         print(f'JP release: {self.release_JP}')
         print(f'Wiki URL = {self.game_url}')
         print('\n')
-    
+
     def prepare_dates(self, data_from_wiki):
-        
-        #getting all release dates for all platforms
-        trimmed_text = re.sub(r'.*?(?=Super NES|SNES|Super Famicom)', '', data_from_wiki, flags=re.S)
-        trimmed_text = re.sub(r'.*?(?=Release)', '', trimmed_text, flags=re.S)
-        trimmed_text = re.sub(r'Genre.*$', '', trimmed_text, flags=re.S)
-        
-        #if month was written like May-June, we're going to take the first part into consideration
-        trimmed_text = re.sub(r'(January|February|March|April|May|June|July|August|September|October|November|December)-\w+\s+(\d{4})', r'\1 \2', trimmed_text)
-        
-        #removing square brackets with its content
-        trimmed_text = re.sub(r'\[\d+\]', '', trimmed_text)
-        
-        #changing "Release" for "SNES" so it could be processed
-        trimmed_text = re.sub(r'Release', 'Super NES', trimmed_text)
-        
-        pattern = r'(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)'
-        trimmed_text = re.sub(pattern, lambda x: f"{x.group(2)} {x.group(1)},", trimmed_text)
-        #print(trimmed_text)
-        
-        # adding missing day if needed
-        trimmed_text = re.sub(r'(January|February|March|April|May|June|July|August|September|October|November|December)(?=\s+\d{4})', r'\1 01,', trimmed_text)
-        
-        #adding missing day and year if needed
-        trimmed_text = re.sub(r'(?<!\d, )(?!January|February|March|April|May|June|July|August|September|October|November|December)(?<!\d)(\d{4})(?!\d)', r'December 01, \1', trimmed_text)
-        
-        #if region prefix is completely missing, add NA:
+        trimmed_text = self.initial_cleanup(data_from_wiki)
+        trimmed_text = self.replace_dates(trimmed_text)
+        trimmed_text = self.adjust_platform_names(trimmed_text)
+        trimmed_text = self.normalize_regions(trimmed_text)
+        results = self.extract_dates(trimmed_text)
+        self.set_dates(results)
+
+    def initial_cleanup(self, text):
+        # Clean up text to extract relevant sections only
+        text = re.sub(r'.*?(?=Release)', '', text, flags=re.S)
+        text = re.sub(r'Genre.*$', '', text, flags=re.S)
+        text = re.sub(r'\[\d+\]', '', text)  # Remove content in square brackets
+        return text
+
+    def replace_dates(self, text):
+        # Standardize date formats and handle ranges
+        text = re.sub(
+            r'(January|February|March|April|May|June|July|August|September|October|November|December)-\w+\s+(\d{4})',
+            r'\1 \2', text)
+        text = re.sub(
+            r'(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)',
+            lambda x: f"{x.group(2)} {x.group(1)},", text)
+        text = re.sub(
+            r'(January|February|March|April|May|June|July|August|September|October|November|December)(?=\s+\d{4})',
+            r'\1 01,', text)
+        text = re.sub(
+            r'(?<!\d, )(?!January|February|March|April|May|June|July|August|September|October|November|December)(?<!\d)(\d{4})(?!\d)',
+            r'December 01, \1', text)
+        return text
+
+    def adjust_platform_names(self, text):
+        # Normalize various platform names to "SNES"
+        return re.sub(r'(:?\s*:?)(Super NES|SNES|Super Nintendo|Super Famicom)(:?\s*:)', 'SNES', text)
+
+    def normalize_regions(self, text):
+        # Normalize and add missing region prefixes
         months = "(January|February|March|April|May|June|July|August|September|October|November|December)"
         pattern = fr"(JP: |PAL: |EU: |NA: )?{months}"
-        trimmed_text = re.sub(pattern, lambda m: f"{m.group(1) if m.group(1) else 'NA: '}{m.group(2)}", trimmed_text)
-        trimmed_text = re.sub(r':NA', 'NA', trimmed_text)    
-        
-        #if region is preceeded by :
-        trimmed_text = re.sub(r":(JP|PAL|EU|NA)\b", r"\1", trimmed_text)
-        
-        #if region is preceeded by space
-        trimmed_text = re.sub(r'\s*(JP|NA|EU|PAL):', r'\1:', trimmed_text)
-        
-        #swap Super NES, SNES, Famicom etc. to SNES
-        pattern = r'(:?\s*:?)(Super NES|SNES|Super Nintendo|Super Famicom)(:?\s*:)'
-        trimmed_text = re.sub(pattern, 'SNES', trimmed_text)
-        
-        #use only SNES, because text will be altered to that keyword
-        pattern = r"(Super NES|SNES|Super Famicom)(?:((?:JP|NA|PAL|EU): \w+ \d{1,2}, \d{4}))+"
-        matches = re.finditer(pattern, trimmed_text)
+        text = re.sub(pattern, lambda m: f"{m.group(1) if m.group(1) else 'NA: '}{m.group(2)}", text)
+        text = re.sub(r':NA', 'NA', text)
+        text = re.sub(r":(JP|PAL|EU|NA)\b", r"\1", text)
+        text = re.sub(r'\s*(JP|NA|EU|PAL):', r'\1:', text)
+        return text
 
+    def extract_dates(self, text):
+        # Extract dates for each console and region
+        pattern = r"(Super NES|SNES|Super Famicom)((?:JP|NA|PAL|EU): \w+ \d{1,2}, \d{4})+"
+        matches = re.finditer(pattern, text)
         results = {}
         for match in matches:
             console_name = match.group(1)
             data_matches = re.findall(r"(JP|NA|PAL|EU): (\w+ \d{1,2}, \d{4})", match.group(0))
             results[console_name] = data_matches
+        return results
 
-        self.set_dates(results)  
-            
     def set_dates(self, results):
+        # Update the release dates based on extracted results
         for console, dates in results.items():
             for region, date in dates:
                 if region == "NA":
                     self.release_NA = date
                 elif region == "JP":
                     self.release_JP = date
-                else:
+                elif region == "PAL":
                     self.release_PAL = date
