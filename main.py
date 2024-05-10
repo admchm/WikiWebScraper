@@ -1,7 +1,7 @@
 import time
 import requests
-from bs4 import BeautifulSoup
 
+from bs4 import BeautifulSoup
 from models.Item import Item
 from models.WikiHandler import WikiHandler
 from models.TextResources import TextRes
@@ -15,10 +15,13 @@ for url in shared.urls:
 
     for element in soup.find_all('a', href=True):
         url_item_name = element[TextRes.get_href()]
-        if url_item_name[0:6]==TextRes.get_wiki_endpoint(): 
+        
+        if url_item_name[0:6]==TextRes.get_wiki_endpoint():
+             
             if not shared.forbidden(url_item_name):
                 url = TextRes.get_wiki_base_adress() + element[TextRes.get_href()]
                 page_details = requests.get(url)
+                
                 soup = BeautifulSoup(page_details.content, TextRes.get_html_attrib())
                 result = soup.find_all(class_ = TextRes.get_wiki_game_details_table_name())
                 
