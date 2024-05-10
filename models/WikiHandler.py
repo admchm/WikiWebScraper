@@ -23,7 +23,6 @@ class WikiHandler:
                 
         return False
     
-    @staticmethod
     def calculate_objects_count(self):
         print("Calculating objects")
 

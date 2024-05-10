@@ -48,4 +48,4 @@ for url in shared.urls:
                     
 print(f"Edited {len(shared.SNES_games_list)} games for {round(time.time()-start,1)} seconds")
 
-shared.calculate_objects_count
+shared.calculate_objects_count()
