@@ -3,8 +3,9 @@ import asyncio
 import aiohttp
 from bs4 import BeautifulSoup
 
+from ItemDataProcessor import ItemDataProcessor
 from models.Item import Item
-from models.WikiHandler import WikiHandler
+from WikiHandler import WikiHandler
 from models.TextResources import TextRes
 
 async def fetch(session, url):
@@ -19,8 +20,11 @@ async def get_article_data_from_table(session, element):
     result = soup.find_all(class_ = TextRes.get_wiki_game_details_table_name())
     return url, result
 
-def propagate_data(wiki_handler, table_content, single_item):
-    single_item.prepare_dates(table_content.get_text())
+def propagate_data(wiki_handler, table_content, single_item, processor):
+    data_from_wiki = table_content.get_text()
+    
+    results = processor.prepare_dates(data_from_wiki)
+    processor.set_dates(single_item, results)
     single_item.show_item_details()
                     
     wiki_handler.SNES_games_list.append(single_item)
@@ -53,7 +57,9 @@ async def main():
             if result:
                 table_content = result[0].contents[0]    
                 single_item = Item(title = table_content.contents[0].get_text(), game_url= url)
-                propagate_data(wiki_handler, table_content, single_item)
+                processor = ItemDataProcessor()
+                
+                propagate_data(wiki_handler, table_content, single_item, processor)
                             
                 increment_counter_if_dates_are_empty(wiki_handler, single_item)
                             
