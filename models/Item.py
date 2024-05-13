@@ -20,54 +20,59 @@ class Item:
     
     def prepare_dates(self, data_from_wiki):
         
-        #getting all release dates for all platforms
-        trimmed_text = re.sub(r'.*?(?=Super NES|SNES|Super Famicom)', '', data_from_wiki, flags=re.S)
-        trimmed_text = re.sub(r'.*?(?=Release)', '', trimmed_text, flags=re.S)
+        months = r"(January|February|March|April|May|June|July|August|September|October|November|December)"
+        console_names = r"(Super NES|SNES|Super Nintendo|Super Famicom)"
+        region_codes = r"(JP|PAL|EU|NA)"
+
+        # Removing earlier content before main release data
+        pattern = rf'.*?(?={console_names}|Release)'
+        trimmed_text = re.sub(pattern, '', data_from_wiki, flags=re.S)
+        
+        # Removing irrelevant content after genre information
         trimmed_text = re.sub(r'Genre.*$', '', trimmed_text, flags=re.S)
-        
-        #if month was written like May-June, we're going to take the first part into consideration
-        trimmed_text = re.sub(r'(January|February|March|April|May|June|July|August|September|October|November|December)-\w+\s+(\d{4})', r'\1 \2', trimmed_text)
-        
-        #removing square brackets with its content
+
+        # Simplify date range entries, assuming the regex pattern needs to capture month and year
+        trimmed_text = re.sub(fr'{months} [\-–] \w+ (\d{{4}})', r'\1', trimmed_text)
+
+        # Removing square brackets and their numeric contents
         trimmed_text = re.sub(r'\[\d+\]', '', trimmed_text)
-        
-        #changing "Release" for "SNES" so it could be processed
+
+        # Unify terminology for easier processing downstream
         trimmed_text = re.sub(r'Release', 'Super NES', trimmed_text)
         
-        pattern = r'(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)'
+        # Create a pattern using the 'months' variable
+        pattern = rf'(\d{{1,2}})\s+{months}'
         trimmed_text = re.sub(pattern, lambda x: f"{x.group(2)} {x.group(1)},", trimmed_text)
-        #print(trimmed_text)
         
         # adding missing day if needed
-        trimmed_text = re.sub(r'(January|February|March|April|May|June|July|August|September|October|November|December)(?=\s+\d{4})', r'\1 01,', trimmed_text)
+        trimmed_text = re.sub(fr'({months})(?=\s+\d{{4}})', r'\1 01,', trimmed_text)
         
         #adding missing day and year if needed
         trimmed_text = re.sub(r'(?<!\d, )(?!January|February|March|April|May|June|July|August|September|October|November|December)(?<!\d)(\d{4})(?!\d)', r'December 01, \1', trimmed_text)
-        
+
         #if region prefix is completely missing, add NA:
-        months = "(January|February|March|April|May|June|July|August|September|October|November|December)"
         pattern = fr"(JP: |PAL: |EU: |NA: )?{months}"
         trimmed_text = re.sub(pattern, lambda m: f"{m.group(1) if m.group(1) else 'NA: '}{m.group(2)}", trimmed_text)
-        trimmed_text = re.sub(r':NA', 'NA', trimmed_text)    
-        
-        #if region is preceeded by :
-        trimmed_text = re.sub(r":(JP|PAL|EU|NA)\b", r"\1", trimmed_text)
-        
-        #if region is preceeded by space
-        trimmed_text = re.sub(r'\s*(JP|NA|EU|PAL):', r'\1:', trimmed_text)
-        
-        #swap Super NES, SNES, Famicom etc. to SNES
-        pattern = r'(:?\s*:?)(Super NES|SNES|Super Nintendo|Super Famicom)(:?\s*:)'
-        trimmed_text = re.sub(pattern, 'SNES', trimmed_text)
-        
-        #use only SNES, because text will be altered to that keyword
-        pattern = r"(Super NES|SNES|Super Famicom)(?:((?:JP|NA|PAL|EU): \w+ \d{1,2}, \d{4}))+"
+        trimmed_text = re.sub(r':NA', 'NA', trimmed_text)        
+
+        # Removing colon or extra spaces before region codes and ensuring consistent format
+        trimmed_text = re.sub(rf"\s*:?{region_codes}\b", r"\1", trimmed_text)  # Handles both cases: preceded by ":" or " "
+        trimmed_text = re.sub(rf"\s*{region_codes}:", r"\1:", trimmed_text)  # Ensures colon follows the region code
+
+        # Standardize various console names to 'SNES'
+        trimmed_text = re.sub(rf"\s*:?{console_names}\s*:", "SNES", trimmed_text)
+
+        # Simplify further handling by converting all console references to 'SNES'
+        trimmed_text = re.sub(console_names, "SNES", trimmed_text)
+
+        # Pattern for finding matches with console and region information
+        pattern = rf"(SNES)(?:\s*{region_codes}: \w+ \d{{1,2}}, \d{{4}})+"
         matches = re.finditer(pattern, trimmed_text)
 
         results = {}
         for match in matches:
             console_name = match.group(1)
-            data_matches = re.findall(r"(JP|NA|PAL|EU): (\w+ \d{1,2}, \d{4})", match.group(0))
+            data_matches = re.findall(rf"{region_codes}: (\w+ \d{{1,2}}, \d{{4}})", match.group(0))
             results[console_name] = data_matches
 
         self.set_dates(results)  
@@ -79,5 +84,5 @@ class Item:
                     self.release_NA = date
                 elif region == "JP":
                     self.release_JP = date
-                else:
-                    self.release_PAL = date
+                elif region in ("EU", "PAL"):
+                    self.release_Pal = date

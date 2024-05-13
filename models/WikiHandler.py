@@ -1,6 +1,4 @@
-#from singletons.singleton import singleton
 
-#@singleton
 class WikiHandler:
     urls = ["https://en.wikipedia.org/wiki/Category:Super_Nintendo_Entertainment_System_games", 
         "https://en.wikipedia.org/w/index.php?title=Category:Super_Nintendo_Entertainment_System_games&pagefrom=Donkey+Kong+Country+2%3A+Diddy%27s+Kong+Quest#mw-pages",
