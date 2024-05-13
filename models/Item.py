@@ -16,6 +16,3 @@ class Item:
         print(f'JP release: {self.release_JP}')
         print(f'Wiki URL = {self.game_url}')
         print('\n')
-        
-        #napisać setter?
-        
