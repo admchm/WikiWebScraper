@@ -23,8 +23,7 @@ async def get_article_data_from_table(session, element):
 def propagate_data(wiki_handler, table_content, single_item, processor):
     data_from_wiki = table_content.get_text()
     
-    results = processor.prepare_dates(data_from_wiki)
-    processor.set_dates(single_item, results)
+    processor.prepare_dates(data_from_wiki, single_item)
     single_item.show_item_details()
                     
     wiki_handler.SNES_games_list.append(single_item)

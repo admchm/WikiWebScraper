@@ -51,21 +51,32 @@ class ItemDataProcessor:
         data = re.sub(rf"\s*:?{console_names}\s*:", "SNES", data)
         return re.sub(console_names, "SNES", data)
 
+    @staticmethod    
+    def set_dates(results, item):
+        for dates in results.items():
+            for region_date in dates:
+                region, date = region_date
+                if region == "NA":
+                    item.release_NA = date
+                elif region == "JP":
+                    item.release_JP = date
+                elif region in ("EU", "PAL"):
+                    item.release_PAL = date
+
     @staticmethod
-    def search_and_group_data(data, region_codes):
+    def search_and_group_data(data, region_codes, item):
         pattern = rf"(SNES)(?:\s*({region_codes}): (\w+ \d{{1,2}}, \d{{4}}))+"
         matches = re.finditer(pattern, data)
         results = {}
-        
         for match in matches:
             console_name = match.group(1)
-            # Making sure that returned data will be in a correct format (region, data)
-            data_matches = [(m.group(1), m.group(2)) for m in re.finditer(rf"({region_codes}): (\w+ \d{{1,2}}, \d{{4}})", match.group(0))]
+            data_matches = re.findall(rf"{region_codes}: (\w+ \d{{1,2}}, \d{{4}})", match.group(0))
             results[console_name] = data_matches
-        return results
+
+        ItemDataProcessor.set_dates(results, item)
 
     @staticmethod
-    def prepare_dates(data_from_wiki):
+    def prepare_dates(data_from_wiki, item):
         months = r"(January|February|March|April|May|June|July|August|September|October|November|December)"
         console_names = r"(Super NES|SNES|Super Nintendo|Super Famicom)"
         region_codes = r"(JP|PAL|EU|NA)"
@@ -82,15 +93,4 @@ class ItemDataProcessor:
         data = ItemDataProcessor.remove_colon_before_region_codes(data, region_codes)
         data = ItemDataProcessor.simplify_searched_console_names(data, console_names)
         
-        return ItemDataProcessor.search_and_group_data(data, region_codes)
-    
-    @staticmethod
-    def set_dates(item, results):
-        for region_dates in results.items():
-            for region, date in region_dates:
-                if region == "NA":
-                    item.release_NA = date
-                elif region == "JP":
-                    item.release_JP = date
-                elif region in ("EU", "PAL"):
-                    item.release_PAL = date
+        return ItemDataProcessor.search_and_group_data(data, region_codes, item)
