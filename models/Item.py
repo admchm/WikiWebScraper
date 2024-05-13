@@ -16,3 +16,13 @@ class Item:
         print(f'JP release: {self.release_JP}')
         print(f'Wiki URL = {self.game_url}')
         print('\n')
+        
+    def set_dates(self, results):
+        for dates in results.items():
+            for region, date in dates:
+                if region == "NA":
+                    self.release_NA = date
+                elif region == "JP":
+                    self.release_JP = date
+                elif region in ("EU", "PAL"):
+                    self.release_PAL = date

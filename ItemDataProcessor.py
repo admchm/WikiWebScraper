@@ -53,16 +53,15 @@ class ItemDataProcessor:
 
     @staticmethod    
     def set_dates(results, item):
-        for dates in results.items():
-            for region_date in dates:
-                region, date = region_date
-                if region == "NA":
-                    item.release_NA = date
-                elif region == "JP":
-                    item.release_JP = date
-                elif region in ("EU", "PAL"):
-                    item.release_PAL = date
-
+        
+        for region, date in results:
+            if region == "NA":
+                item.release_NA = date
+            elif region == "JP":
+                item.release_JP = date
+            elif region in ("EU", "PAL"):
+                item.release_PAL = date
+ 
     @staticmethod
     def search_and_group_data(data, region_codes, item):
         pattern = rf"(SNES)(?:\s*({region_codes}): (\w+ \d{{1,2}}, \d{{4}}))+"
@@ -70,8 +69,7 @@ class ItemDataProcessor:
         results = {}
         for match in matches:
             console_name = match.group(1)
-            data_matches = re.findall(rf"{region_codes}: (\w+ \d{{1,2}}, \d{{4}})", match.group(0))
-            results[console_name] = data_matches
+            results = re.findall(rf"{region_codes}: (\w+ \d{{1,2}}, \d{{4}})", match.group(0))
 
         ItemDataProcessor.set_dates(results, item)
 
