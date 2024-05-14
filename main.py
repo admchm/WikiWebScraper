@@ -21,7 +21,7 @@ async def fetch(session, url):
         return None
 
 async def get_article_data_from_table(session, element):
-    url = TextRes.get_wiki_base_adress() + element[TextRes.get_href()]
+    url = TextRes.get_wiki_base_address() + element[TextRes.get_href()]
     
     try: 
         page_details = await fetch(session, url)
@@ -42,7 +42,7 @@ def propagate_data(wiki_handler, table_content, single_item, processor):
     wiki_handler.SNES_games_list.append(single_item)
 
 def increment_counter_if_dates_are_empty(wiki_handler, single_item):
-    if single_item.release_JP==TextRes.empty_string and single_item.release_NA==TextRes.empty_string and single_item.release_JP==TextRes.empty_string:
+    if single_item.release_JP==TextRes.EMPTY_STRING and single_item.release_NA==TextRes.EMPTY_STRING and single_item.release_JP==TextRes.EMPTY_STRING:
         wiki_handler.counter += 1
 
 async def main():

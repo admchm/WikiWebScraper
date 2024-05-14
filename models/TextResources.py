@@ -1,32 +1,33 @@
-class TextRes:
-    html_attrib = "html.parser"
-    href = "href"
-    wiki_endpoint = "/wiki/"
-    wiki_game_details_table_name = "infobox ib-video-game hproduct"
-    wiki_base_address = "https://en.wikipedia.org"
-    empty_string = "———"
-    
+from ImmutableAttributes import ImmutableAttributes
+
+class TextRes(metaclass=ImmutableAttributes):
+    HTML_ATTRIB: str = "html.parser"
+    HREF: str  = "href"
+    WIKI_ENDPOINT: str  = "/wiki/"
+    WIKI_GAME_DETAILS_TABLE_NAME: str  = "infobox ib-video-game hproduct"
+    WIKI_BASE_ADDRESS: str  = "https://en.wikipedia.org"
+    EMPTY_STRING: str  = "———"
     
     @classmethod
     def get_html_attrib(cls):
-        return cls.html_attrib
+        return cls.HTML_ATTRIB
     
     @classmethod
     def get_href(cls):
-        return cls.href
+        return cls.HREF
     
     @classmethod
     def get_wiki_endpoint(cls):
-        return cls.wiki_endpoint
+        return cls.WIKI_ENDPOINT
     
     @classmethod
     def get_wiki_game_details_table_name(cls):
-        return cls.wiki_game_details_table_name
+        return cls.WIKI_GAME_DETAILS_TABLE_NAME
     
     @classmethod
-    def get_wiki_base_adress(cls):
-        return cls.wiki_base_address
+    def get_wiki_base_address(cls):
+        return cls.WIKI_BASE_ADDRESS
     
     @classmethod
     def get_empty_string(cls):
-        return cls.empty_string
+        return cls.EMPTY_STRING
