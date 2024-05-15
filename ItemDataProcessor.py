@@ -8,6 +8,12 @@ class ItemDataProcessor:
 
     @staticmethod
     def remove_content_after_genre(data):
+        
+        #print(f"data = {data}")
+        #print("\n")
+        expected_result = re.sub(r'Genre.*$', '', data, flags=re.S)
+        #print(f"expected_result = {expected_result}")
+        
         return re.sub(r'Genre.*$', '', data, flags=re.S)
 
     @staticmethod
