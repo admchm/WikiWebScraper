@@ -1,59 +1,46 @@
 import pytest
 from ItemDataProcessor import ItemDataProcessor
     
-# def simplify_date_ranges():
-#     data = ""
-#     months = ""
+def test_replace_release_keyword_with_platform_name():
+    data = ""
     
-#     pass
+    pass
     
-# def remove_square_brackets():
-#     data = ""
+def test_format_dates():
+    data = ""
+    months = ""
     
-#     pass
+    pass
     
-# def replace_release_keyword_with_platform_name():
-#     data = ""
+def test_add_missing_day_to_months():
+    data = ""
+    months = ""
     
-#     pass
+    pass
     
-# def format_dates():
-#     data = ""
-#     months = ""
+def test_add_missing_day_and_year_if_needed():
+    data = ""
     
-#     pass
+    pass
     
-# def add_missing_day_to_months():
-#     data = ""
-#     months = ""
+def test_add_default_region_prefix():
+    data = ""
+    months = ""
     
-#     pass
+    pass
     
-# def add_missing_day_and_year_if_needed():
-#     data = ""
+def test_simplify_searched_console_names():
+    data = ""
+    console_names = ""
     
-#     pass
-    
-# def add_default_region_prefix():
-#     data = ""
-#     months = ""
-    
-#     pass
-    
-# def remove_colon_before_region_codes():
-#     data = ""
-#     region_codes = ""
-    
-#     pass
-    
-# def simplify_searched_console_names():
-#     data = ""
-#     console_names = ""
-    
-#     pass
+    pass
         
-        
+def test_search_and_group_data():
+    data = ""
+    region_codes = ""
+    item = ""
     
+    pass
 
     
     
