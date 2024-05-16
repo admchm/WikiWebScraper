@@ -3,16 +3,6 @@ import re
 class ItemDataProcessor:
     
     @staticmethod
-    def remove_content_after_genre(data):
-        
-        #print(f"data = {data}")
-        #print("\n")
-        expected_result = re.sub(r'Genre.*$', '', data, flags=re.S)
-        #print(f"expected_result = {expected_result}")
-        
-        return re.sub(r'Genre.*$', '', data, flags=re.S)
-
-    @staticmethod
     def simplify_date_ranges(data, months):
         return re.sub(fr'{months} [\-–] \w+ (\d{{4}})', r'\1', data)
 
@@ -81,8 +71,14 @@ class ItemDataProcessor:
         console_names = r"(Super NES|SNES|Super Nintendo|Super Famicom)"
         region_codes = r"(JP|PAL|EU|NA)"
 
-        data = ItemDataProcessor.remove_content_after_genre(data_from_wiki)
-        data = ItemDataProcessor.simplify_date_ranges(data, months)
+        #print(f"pre: {data_from_wiki}")
+        #print("\n")
+        
+        #print(f"post: {data}")
+        #print("\n")
+        
+        
+        data = ItemDataProcessor.simplify_date_ranges(data_from_wiki, months)
         data = ItemDataProcessor.remove_square_brackets(data)
         data = ItemDataProcessor.replace_release_keyword_with_platform_name(data)
         data = ItemDataProcessor.format_dates(data, months)
