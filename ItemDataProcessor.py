@@ -54,14 +54,25 @@ class ItemDataProcessor:
             results = re.findall(rf"{region_codes}: (\w+ \d{{1,2}}, \d{{4}})", match.group(0))
 
         ItemDataProcessor.set_dates(results, item)
+        
+    def helper_print(pre, post):
+        print(f"pre: {pre}")
+        print("\n")
+        print(f"post: {post}")
+        print("\n")
 
     @staticmethod
     def prepare_dates(data_from_wiki, item):
         months = r"(January|February|March|April|May|June|July|August|September|October|November|December)"
         console_names = r"(Super NES|SNES|Super Nintendo|Super Famicom)"
         region_codes = r"(JP|PAL|EU|NA)"
-
+    
+        pre = data_from_wiki
         data = ItemDataProcessor.remove_square_brackets(data_from_wiki)
+        post = data
+        
+        ItemDataProcessor.helper_print(data_from_wiki, data)
+        
         data = ItemDataProcessor.replace_release_keyword_with_platform_name(data)
         data = ItemDataProcessor.format_dates(data, months)
         data = ItemDataProcessor.add_missing_day_to_months(data, months)
