@@ -46,27 +46,43 @@ def test_format_dates(input_string, expected_result):
 ])
 def test_add_missing_day_to_months(input_string, expected_result):
     months = r"(January|February|March|April|May|June|July|August|September|October|November|December)"
-    
     result = re.sub(fr'({months})(?=\s+\d{{4}})', r'\1 01,', input_string)
     
     assert result == expected_result
     
-def test_add_missing_day_and_year_if_needed():
-    data = ""
+@pytest.mark.parametrize("input_string, expected_result", [
+    ("Young MerlinDeveloper(s)Westwood StudiosPublisher(s)Virgin GamesComposer(s)Paul MudraFrank KlepackiDwight OkaharaPlatform(s)Super NESSuper NESNA: 1993EU: March 31, 1994Genre(s)Action-AdventureMode(s)Single-player",
+     "Young MerlinDeveloper(s)Westwood StudiosPublisher(s)Virgin GamesComposer(s)Paul MudraFrank KlepackiDwight OkaharaPlatform(s)Super NESSuper NESNA: December 01, 1993EU: March 31, 1994Genre(s)Action-AdventureMode(s)Single-player")
+])    
+def test_add_missing_day_and_year_if_needed(input_string, expected_result):
+    result = re.sub(r'(?<!\d, )(?!January|February|March|April|May|June|July|August|September|October|November|December)(?<!\d)(\d{4})(?!\d)', r'December 01, \1', input_string)
     
-    pass
-    
-def test_add_default_region_prefix():
-    data = ""
+    assert result == expected_result
+
+@pytest.mark.parametrize("input_string, expected_result", [
+    ("Zero the Kamikaze SquirrelCover art for the Genesis versionDeveloper(s)Iguana EntertainmentPublisher(s)SunsoftDirector(s)Neill GlancyTeam IguanaDesigner(s)Neill GlancyTeam ZeroComposer(s)Rick Fox (as Fox Productions)Platform(s)Sega GenesisSuper NESSuper NESGenesisNA: October 01, 1994UK: July 01, 1995Super NESNA: November 01, 1994Genre(s)PlatformMode(s)Single-player",
+     "Zero the Kamikaze SquirrelCover art for the Genesis versionDeveloper(s)Iguana EntertainmentPublisher(s)SunsoftDirector(s)Neill GlancyTeam IguanaDesigner(s)Neill GlancyTeam ZeroComposer(s)Rick Fox (as Fox Productions)Platform(s)Sega GenesisSuper NESSuper NESGenesisNA: October 01, 1994UK: NA: July 01, 1995Super NESNA: November 01, 1994Genre(s)PlatformMode(s)Single-player")
+])
+def test_add_default_region_prefix(input_string, expected_result):
     months = r"(January|February|March|April|May|June|July|August|September|October|November|December)"
+    pattern = fr"(JP: |PAL: |EU: |NA: )?{months}"
     
-    pass
+    altered_data = re.sub(pattern, lambda m: f"{m.group(1) if m.group(1) else 'NA: '}{m.group(2)}", input_string)
+    result = re.sub(r':NA', 'NA', altered_data)
     
-def test_simplify_searched_console_names():
-    data = ""
+    assert result == expected_result
+    
+@pytest.mark.parametrize("input_string, expected_result", [
+    ("Yūyu no Quiz de Go! Go!Arcade flyerPublisher(s)TaitoComposer(s)Tamayo Kawamoto  Kiyohiro Sada  Masako InataPlatform(s)Arcade, Super FamicomSuper NESArcade: NA: December 01, 1990  Super Famicom: JP: July 10, 1992Genre(s)QuizMode(s)Single-player, multiplayer",
+     "Yūyu no Quiz de Go! Go!Arcade flyerPublisher(s)TaitoComposer(s)Tamayo Kawamoto  Kiyohiro Sada  Masako InataPlatform(s)Arcade, SNESSNESArcade: NA: December 01, 1990SNES JP: July 10, 1992Genre(s)QuizMode(s)Single-player, multiplayer")
+])    
+def test_simplify_searched_console_names(input_string, expected_result):
     console_names = r"(Super NES|SNES|Super Nintendo|Super Famicom)"
     
-    pass
+    string = re.sub(rf"\s*:?{console_names}\s*:", "SNES", input_string)
+    result = re.sub(console_names, "SNES", string)
+    
+    assert result == expected_result
         
 def test_search_and_group_data():
     data = ""
