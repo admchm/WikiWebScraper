@@ -38,11 +38,18 @@ def test_format_dates(input_string, expected_result):
     
     assert result == expected_result
     
-def test_add_missing_day_to_months():
-    data = ""
-    months = ""
+@pytest.mark.parametrize("input_string, expected_result", [
+    ("Zero4 Champ RRCover artDeveloper(s)Media RingsPublisher(s)Media RingsDirector(s)Yasunori IsekiProgrammer(s)Ryoichi Sato  Hiroshi KatoComposer(s)Katsuhiro Hayashi  Jouji IijimaSeriesZero4 Champ seriesPlatform(s)Super FamicomSuper NESJP: July 22, 1994Genre(s)Arcade racingMode(s)Single-player, multiplayer",
+     "Zero4 Champ RRCover artDeveloper(s)Media RingsPublisher(s)Media RingsDirector(s)Yasunori IsekiProgrammer(s)Ryoichi Sato  Hiroshi KatoComposer(s)Katsuhiro Hayashi  Jouji IijimaSeriesZero4 Champ seriesPlatform(s)Super FamicomSuper NESJP: July 22, 1994Genre(s)Arcade racingMode(s)Single-player, multiplayer"),
+    ("Ys III: Wanderers from YsDeveloper(s)Nihon FalcomPublisher(s)Nihon FalcomComposer(s)Mieko IshikawaSeriesYsPlatform(s)PC-8801, PC-9801, MSX2, X68000, TurboGrafx-CD, Super NES, Famicom, Genesis, PlayStation 2Super NESPC-8801JP: July 21, 1989PC-9801JP: July 28, 1989MSX2JP: October 20, 1989X68000JP: March 24, 1990TurboGrafx-CDJP: March 22, 1991NA: November 1991Super NESJP: June 21, 1991NA: January 1992FamicomJP: September 27, 1991GenesisJP: November 1, 1991NA: 1991PlayStation 2JP: March 24, 2005Genre(s)Action role-playingMode(s)Single-player",
+     "Ys III: Wanderers from YsDeveloper(s)Nihon FalcomPublisher(s)Nihon FalcomComposer(s)Mieko IshikawaSeriesYsPlatform(s)PC-8801, PC-9801, MSX2, X68000, TurboGrafx-CD, Super NES, Famicom, Genesis, PlayStation 2Super NESPC-8801JP: July 21, 1989PC-9801JP: July 28, 1989MSX2JP: October 20, 1989X68000JP: March 24, 1990TurboGrafx-CDJP: March 22, 1991NA: November 01, 1991Super NESJP: June 21, 1991NA: January 01, 1992FamicomJP: September 27, 1991GenesisJP: November 1, 1991NA: 1991PlayStation 2JP: March 24, 2005Genre(s)Action role-playingMode(s)Single-player")
+])
+def test_add_missing_day_to_months(input_string, expected_result):
+    months = r"(January|February|March|April|May|June|July|August|September|October|November|December)"
     
-    pass
+    result = re.sub(fr'({months})(?=\s+\d{{4}})', r'\1 01,', input_string)
+    
+    assert result == expected_result
     
 def test_add_missing_day_and_year_if_needed():
     data = ""
@@ -51,13 +58,13 @@ def test_add_missing_day_and_year_if_needed():
     
 def test_add_default_region_prefix():
     data = ""
-    months = ""
+    months = r"(January|February|March|April|May|June|July|August|September|October|November|December)"
     
     pass
     
 def test_simplify_searched_console_names():
     data = ""
-    console_names = ""
+    console_names = r"(Super NES|SNES|Super Nintendo|Super Famicom)"
     
     pass
         
