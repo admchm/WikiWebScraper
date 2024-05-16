@@ -1,10 +1,6 @@
 import re
 
 class ItemDataProcessor:
-    
-    @staticmethod
-    def simplify_date_ranges(data, months):
-        return re.sub(fr'{months} [\-–] \w+ (\d{{4}})', r'\1', data)
 
     @staticmethod
     def remove_square_brackets(data):
@@ -71,15 +67,7 @@ class ItemDataProcessor:
         console_names = r"(Super NES|SNES|Super Nintendo|Super Famicom)"
         region_codes = r"(JP|PAL|EU|NA)"
 
-        #print(f"pre: {data_from_wiki}")
-        #print("\n")
-        
-        #print(f"post: {data}")
-        #print("\n")
-        
-        
-        data = ItemDataProcessor.simplify_date_ranges(data_from_wiki, months)
-        data = ItemDataProcessor.remove_square_brackets(data)
+        data = ItemDataProcessor.remove_square_brackets(data_from_wiki)
         data = ItemDataProcessor.replace_release_keyword_with_platform_name(data)
         data = ItemDataProcessor.format_dates(data, months)
         data = ItemDataProcessor.add_missing_day_to_months(data, months)
