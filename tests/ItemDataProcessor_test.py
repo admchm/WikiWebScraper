@@ -27,11 +27,16 @@ def test_replace_release_keyword_with_platform_name(input_string, expected_resul
     
     assert result == expected_result
     
-def test_format_dates():
-    data = ""
-    months = ""
+@pytest.mark.parametrize("input_string, expected_result", [
+    ("World League SoccerNorth American cover artDeveloper(s)C-LabPublisher(s)JP: ImagineerNA: MindscapeComposer(s)Kazuo SawaPlatform(s)Super NES, Sharp X68000Super NESSuper NESJP: 20 September 1991NA: April 1992Sharp X68000JP: 29 November 1991Genre(s)SportsMode(s)Single-player, multiplayer",
+     "World League SoccerNorth American cover artDeveloper(s)C-LabPublisher(s)JP: ImagineerNA: MindscapeComposer(s)Kazuo SawaPlatform(s)Super NES, Sharp X68000Super NESSuper NESJP: September 20, 1991NA: April 1992Sharp X68000JP: November 29, 1991Genre(s)SportsMode(s)Single-player, multiplayer"),
+])    
+def test_format_dates(input_string, expected_result):
+    months = r"(January|February|March|April|May|June|July|August|September|October|November|December)"
+    pattern = rf'(\d{{1,2}})\s+{months}'
+    result = re.sub(pattern, lambda x: f"{x.group(2)} {x.group(1)},", input_string)
     
-    pass
+    assert result == expected_result
     
 def test_add_missing_day_to_months():
     data = ""

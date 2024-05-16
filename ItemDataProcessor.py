@@ -68,13 +68,14 @@ class ItemDataProcessor:
         region_codes = r"(JP|PAL|EU|NA)"
     
         
-        pre = ItemDataProcessor.remove_square_brackets(data_from_wiki)
-        post = ItemDataProcessor.replace_release_keyword_with_platform_name(pre)
+        data = ItemDataProcessor.remove_square_brackets(data_from_wiki)
+        data = ItemDataProcessor.replace_release_keyword_with_platform_name(data)
     
+        pre = data 
+        post = ItemDataProcessor.format_dates(data, months)
         ItemDataProcessor.helper_print(pre, post)
         
-        data = ItemDataProcessor.format_dates(post, months)
-        data = ItemDataProcessor.add_missing_day_to_months(data, months)
+        data = ItemDataProcessor.add_missing_day_to_months(post, months)
         data = ItemDataProcessor.add_missing_day_and_year_if_needed(data)
         data = ItemDataProcessor.add_default_region_prefix(data, months)
         data = ItemDataProcessor.simplify_searched_console_names(data, console_names)
