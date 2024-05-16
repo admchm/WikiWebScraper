@@ -30,11 +30,6 @@ class ItemDataProcessor:
         return re.sub(r':NA', 'NA', data)
 
     @staticmethod
-    def remove_colon_before_region_codes(data, region_codes):
-        data = re.sub(rf"\s*:?{region_codes}\b", r"\1", data)
-        return re.sub(rf"\s*{region_codes}:", r"\1:", data)
-
-    @staticmethod
     def simplify_searched_console_names(data, console_names):
         data = re.sub(rf"\s*:?{console_names}\s*:", "SNES", data)
         return re.sub(console_names, "SNES", data)
@@ -56,7 +51,6 @@ class ItemDataProcessor:
         matches = re.finditer(pattern, data)
         results = {}
         for match in matches:
-            console_name = match.group(1)
             results = re.findall(rf"{region_codes}: (\w+ \d{{1,2}}, \d{{4}})", match.group(0))
 
         ItemDataProcessor.set_dates(results, item)
@@ -73,7 +67,6 @@ class ItemDataProcessor:
         data = ItemDataProcessor.add_missing_day_to_months(data, months)
         data = ItemDataProcessor.add_missing_day_and_year_if_needed(data)
         data = ItemDataProcessor.add_default_region_prefix(data, months)
-        data = ItemDataProcessor.remove_colon_before_region_codes(data, region_codes)
         data = ItemDataProcessor.simplify_searched_console_names(data, console_names)
         
         return ItemDataProcessor.search_and_group_data(data, region_codes, item)
