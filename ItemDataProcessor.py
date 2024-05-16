@@ -3,10 +3,6 @@ import re
 class ItemDataProcessor:
     
     @staticmethod
-    def remove_characters_before_release_keyword(data, console_names):
-        return re.sub(rf'.*?(?={console_names}|Release)', '', data, flags=re.S)
-
-    @staticmethod
     def remove_content_after_genre(data):
         
         #print(f"data = {data}")
@@ -85,8 +81,7 @@ class ItemDataProcessor:
         console_names = r"(Super NES|SNES|Super Nintendo|Super Famicom)"
         region_codes = r"(JP|PAL|EU|NA)"
 
-        data = ItemDataProcessor.remove_characters_before_release_keyword(data_from_wiki, console_names)
-        data = ItemDataProcessor.remove_content_after_genre(data)
+        data = ItemDataProcessor.remove_content_after_genre(data_from_wiki)
         data = ItemDataProcessor.simplify_date_ranges(data, months)
         data = ItemDataProcessor.remove_square_brackets(data)
         data = ItemDataProcessor.replace_release_keyword_with_platform_name(data)
