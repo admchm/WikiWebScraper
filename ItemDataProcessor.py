@@ -67,14 +67,13 @@ class ItemDataProcessor:
         console_names = r"(Super NES|SNES|Super Nintendo|Super Famicom)"
         region_codes = r"(JP|PAL|EU|NA)"
     
-        pre = data_from_wiki
-        data = ItemDataProcessor.remove_square_brackets(data_from_wiki)
-        post = data
         
-        ItemDataProcessor.helper_print(data_from_wiki, data)
+        pre = ItemDataProcessor.remove_square_brackets(data_from_wiki)
+        post = ItemDataProcessor.replace_release_keyword_with_platform_name(pre)
+    
+        ItemDataProcessor.helper_print(pre, post)
         
-        data = ItemDataProcessor.replace_release_keyword_with_platform_name(data)
-        data = ItemDataProcessor.format_dates(data, months)
+        data = ItemDataProcessor.format_dates(post, months)
         data = ItemDataProcessor.add_missing_day_to_months(data, months)
         data = ItemDataProcessor.add_missing_day_and_year_if_needed(data)
         data = ItemDataProcessor.add_default_region_prefix(data, months)
