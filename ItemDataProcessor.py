@@ -75,6 +75,5 @@ class ItemDataProcessor:
         data = ItemDataProcessor.add_missing_day_and_year_if_needed(data)
         data = ItemDataProcessor.add_default_region_prefix(data, months)
         data = ItemDataProcessor.simplify_searched_console_names(data, console_names)
-        #ItemDataProcessor.helper_print(pre, post)
         
         return ItemDataProcessor.search_and_group_data(data, region_codes, item)

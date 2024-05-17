@@ -83,14 +83,3 @@ def test_simplify_searched_console_names(input_string, expected_result):
     result = re.sub(console_names, "SNES", string)
     
     assert result == expected_result
-        
-def test_search_and_group_data():
-    data = ""
-    region_codes = ""
-    item = ""
-    
-    pass
-
-    
-    
-        
