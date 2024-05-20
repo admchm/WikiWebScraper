@@ -24,7 +24,6 @@ class TestItem:
         assert item_real.game_url == "https://en.wikipedia.org/wiki/Super_Mario_World"
         
     def test_show_items(self, capsys):
-        
         item_fake = Item("Chrono Trigger 2")
         item_fake.show_item_details()
         captured = capsys.readouterr()

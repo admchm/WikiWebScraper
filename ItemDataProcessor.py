@@ -55,12 +55,6 @@ class ItemDataProcessor:
 
         ItemDataProcessor.set_dates(results, item)
         
-    def helper_print(pre, post):
-        print(f"pre: {pre}")
-        print("\n")
-        print(f"post: {post}")
-        print("\n")
-
     @staticmethod
     def prepare_dates(data_from_wiki, item):
         months = r"(January|February|March|April|May|June|July|August|September|October|November|December)"
