@@ -22,5 +22,4 @@ class WikiHandler:
         return False
     
     def calculate_objects_count(self):
-        print("Count of games without any date")
-        print(self.counter)
+        print(f"Count of games without any date: {self.counter}")
