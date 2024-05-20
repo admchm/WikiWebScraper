@@ -1,6 +1,8 @@
 import pytest
 import os
+import csv
 from CSVCreator import CSVCreator
+from models.Item import Item
 
 class TestCSVCreator:
     def test_combine_path_with_file_name(self):
@@ -19,8 +21,19 @@ class TestCSVCreator:
         assert csv_creator.path_combined == os.path.expanduser("~/SNES_games_list.csv")
     
     def test_prepare_file(self):
+        
+        list_of_items = []
+        
+        item_first = Item("The Addams Family", release_NA="December 01, 1992", release_PAL="———", release_JP="———", game_url="https://en.wikipedia.org/wiki/The_Addams_Family_(video_game)")
+        item_second = Item("The Addams FamilyAsterix & Obelix", release_NA="———", release_PAL="December 01, 1995", release_JP="———", game_url="https://en.wikipedia.org/wiki/Asterix_%26_Obelix_(video_game)")
+        item_third = Item("Bill Walsh College Football", release_NA="February 01, 1994", release_PAL="———", release_JP="———", game_url="https://en.wikipedia.org/wiki/Bill_Walsh_College_Football")
+        
+        list_of_items.append(item_first)
+        list_of_items.append(item_second)
+        list_of_items.append(item_third)
+        
         csv_creator = CSVCreator()
-        csv_creator.prepare_file()
+        csv_creator.prepare_file(list_of_items)
         
         assert os.path.exists(csv_creator.path_combined)
         
@@ -31,9 +44,22 @@ class TestCSVCreator:
             os.remove(csv_creator.path_combined)
         
         assert not os.path.exists(csv_creator.path_combined)
+        
+    def test_csv_columns(self):
+        csv_creator = CSVCreator()
+        test_data = [
+            {"title": "Super Mario World", "platform": "SNES", "release_NA": "1990", 
+             "release_PAL": "1992", "release_JP": "1990", "game_url": "http://example.com"}
+        ]
+        
+        csv_creator.prepare_file(test_data)
+        
+        with open(csv_creator.path_combined, mode='r') as file:
+            reader = csv.reader(file)
+            headers = next(reader) #getting headers from the first line
+            expected_headers = ["Title", "Platform", "NA release", "PAL release", "JP release", "Wiki URL"]
+            assert headers == expected_headers
 
-#check if file contains columns
 #check if file contains specific game titles
 #check if file contains dates for specific titles
-#check if file contains regions
 #check if file contains links
