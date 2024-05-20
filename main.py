@@ -46,12 +46,13 @@ def increment_counter_if_dates_are_empty(wiki_handler, single_item):
     if single_item.release_JP==TextRes.EMPTY_STRING and single_item.release_NA==TextRes.EMPTY_STRING and single_item.release_JP==TextRes.EMPTY_STRING:
         wiki_handler.counter += 1
         
-def create_file():
+def create_file(SNES_games_list):
     csv_creator = CSVCreator()
-    csv_creator.file_name = "SNES_games.csv"
-    csv_creator.path = "~/"
     
-    csv_creator.prepare_file()
+    csv_creator.set_path("~/")
+    csv_creator.set_file_name("SNES_games.csv")
+    
+    csv_creator.prepare_file(SNES_games_list)
     
 async def main():
     wiki_handler = WikiHandler()
@@ -97,6 +98,6 @@ async def main():
         print(f"Edited {len(wiki_handler.SNES_games_list)} games for {round(time.time()-start,1)} seconds")
         wiki_handler.calculate_objects_count()
         
-        create_file()
+        create_file(wiki_handler.SNES_games_list)
 
 asyncio.run(main())
