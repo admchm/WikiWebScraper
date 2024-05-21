@@ -78,3 +78,42 @@ def test_simplify_searched_console_names(input_string, expected_result):
     result = ItemDataProcessor.simplify_searched_console_names(input_string, console_names)
     
     assert result == expected_result
+    
+class MockItem:
+    release_NA = None
+    release_PAL = None
+    release_JP = None
+    
+@pytest.mark.parametrize("results, expected_NA, expected_JP, expected_PAL", [
+    ([('NA', 'December 25, 1995'), ('JP', 'January 1, 1996')], 'December 25, 1995', 'January 1, 1996', None),
+    ([('EU', 'March 10, 1997'), ('PAL', 'April 5, 1997')], None, None, 'April 5, 1997')
+])
+def test_set_dates(results, expected_NA, expected_PAL, expected_JP):
+    item = MockItem()
+    ItemDataProcessor.set_dates(results, item)
+    assert item.release_NA == expected_NA
+    assert item.release_PAL == expected_PAL
+    assert item.release_JP == expected_JP
+    
+@pytest.mark.parametrize("data, expected_NA, expected_JP, expected_PAL", [
+    ("SNES NA: December 25, 1995 JP: January 1, 1996", 'December 25, 1995', 'January 1, 1996', None),
+    ("SNES EU: March 10, 1997 PAL: April 5, 1997", None, None, 'April 5, 1997')
+])
+def test_search_and_group_data(data, expected_NA, expected_JP, expected_PAL):
+    item = MockItem()
+    region_codes = r"(JP|PAL|EU|NA)"
+    ItemDataProcessor.search_and_group_data(data, region_codes, item)
+    assert item.release_NA == expected_NA
+    assert item.release_JP == expected_JP
+    assert item.release_PAL == expected_PAL
+    
+@pytest.mark.parametrize("data_from_wiki, expected_NA, expected_JP, expected_PAL", [
+    ("[2023] SNES Release: NA: December 25, 1995 JP: January 1, 1996", 'December 25, 1995', 'January 1, 1996', None),
+    ("[2024] SNES Release: EU: March 10, 1997 PAL: April 5, 1997", None, None, 'April 5, 1997')
+])
+def test_prepare_dates(data_from_wiki, expected_NA, expected_JP, expected_PAL):
+    item = MockItem()
+    ItemDataProcessor.prepare_dates(data_from_wiki, item)
+    assert item.release_NA == expected_NA
+    assert item.release_JP == expected_JP
+    assert item.release_PAL == expected_PAL
