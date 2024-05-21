@@ -5,11 +5,16 @@ import aiohttp
 from aiohttp import ClientError
 from bs4 import BeautifulSoup
 
-from ItemDataProcessor import ItemDataProcessor
-from models.Item import Item
-from WikiHandler import WikiHandler
+import sys
+import os
+
+#sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+
 from models.TextResources import TextRes
-from CSVCreator import CSVCreator
+from models.Item import Item
+from src.ItemDataProcessor import ItemDataProcessor
+from src.WikiHandler import WikiHandler
+from src.CSVCreator import CSVCreator
 
 async def fetch(session, url):
     try:

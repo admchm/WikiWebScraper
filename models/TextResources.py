@@ -1,4 +1,4 @@
-from ImmutableAttributes import ImmutableAttributes
+from src.ImmutableAttributes import ImmutableAttributes
 
 class TextRes(metaclass=ImmutableAttributes):
     HTML_ATTRIB: str = "html.parser"

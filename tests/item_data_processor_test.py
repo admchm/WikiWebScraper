@@ -1,5 +1,7 @@
 import pytest
 import re
+
+from src.ItemDataProcessor import ItemDataProcessor
     
 @pytest.mark.parametrize("input_string, expected_result", [
     ("""Wing CommanderDeveloper(s)Origin SystemsPublisher(s)Origin SystemsDirector(s)Chris RobertsProducer(s)Chris Roberts  Warren SpectorDesigner(s)Chris RobertsWriter(s)Jeff GeorgeComposer(s)George Alistair Sanger  David GovettPlatform(s)MS-DOSSuper NES, Amiga, Amiga CD32, Sega CD, 3DO, PlayStation, PlayStation Portable, FM Towns, Macintosh, Windows 95ReleaseSeptember 26, 1990September 26, 1990 (MS-DOS)March 1, 1992 (SNES)September 1992 (Amiga)[1]June 1, 1993 (Amiga CD32)March 1994 (Sega CD)August 1995 (Mac)[2]November 30, 1996 (Windows 95)Genre(s)Space flight simulationMode(s)Single-player""",
@@ -10,7 +12,7 @@ import re
     ("s$$$@[342]##a", "s$$$@##a")
 ])
 def test_remove_square_brackets(input_string, expected_result):
-    result = re.sub(r'\[\d+\]', '', input_string)
+    result = ItemDataProcessor.remove_square_brackets(input_string)
     
     assert result == expected_result
 
@@ -23,7 +25,7 @@ def test_remove_square_brackets(input_string, expected_result):
     ("#3#$#Release$", "#3#$#Super NES$")
 ])
 def test_replace_release_keyword_with_platform_name(input_string, expected_result):
-    result =  re.sub(r'Release', 'Super NES', input_string)
+    result = ItemDataProcessor.replace_release_keyword_with_platform_name(input_string)
     
     assert result == expected_result
     
@@ -33,8 +35,7 @@ def test_replace_release_keyword_with_platform_name(input_string, expected_resul
 ])    
 def test_format_dates(input_string, expected_result):
     months = r"(January|February|March|April|May|June|July|August|September|October|November|December)"
-    pattern = rf'(\d{{1,2}})\s+{months}'
-    result = re.sub(pattern, lambda x: f"{x.group(2)} {x.group(1)},", input_string)
+    result = ItemDataProcessor.format_dates(input_string, months)
     
     assert result == expected_result
     
@@ -46,7 +47,7 @@ def test_format_dates(input_string, expected_result):
 ])
 def test_add_missing_day_to_months(input_string, expected_result):
     months = r"(January|February|March|April|May|June|July|August|September|October|November|December)"
-    result = re.sub(fr'({months})(?=\s+\d{{4}})', r'\1 01,', input_string)
+    result = ItemDataProcessor.add_missing_day_to_months(input_string, months)
     
     assert result == expected_result
     
@@ -55,7 +56,7 @@ def test_add_missing_day_to_months(input_string, expected_result):
      "Young MerlinDeveloper(s)Westwood StudiosPublisher(s)Virgin GamesComposer(s)Paul MudraFrank KlepackiDwight OkaharaPlatform(s)Super NESSuper NESNA: December 01, 1993EU: March 31, 1994Genre(s)Action-AdventureMode(s)Single-player")
 ])    
 def test_add_missing_day_and_year_if_needed(input_string, expected_result):
-    result = re.sub(r'(?<!\d, )(?!January|February|March|April|May|June|July|August|September|October|November|December)(?<!\d)(\d{4})(?!\d)', r'December 01, \1', input_string)
+    result = ItemDataProcessor.add_missing_day_and_year_if_needed(input_string)
     
     assert result == expected_result
 
@@ -64,11 +65,8 @@ def test_add_missing_day_and_year_if_needed(input_string, expected_result):
      "Zero the Kamikaze SquirrelCover art for the Genesis versionDeveloper(s)Iguana EntertainmentPublisher(s)SunsoftDirector(s)Neill GlancyTeam IguanaDesigner(s)Neill GlancyTeam ZeroComposer(s)Rick Fox (as Fox Productions)Platform(s)Sega GenesisSuper NESSuper NESGenesisNA: October 01, 1994UK: NA: July 01, 1995Super NESNA: November 01, 1994Genre(s)PlatformMode(s)Single-player")
 ])
 def test_add_default_region_prefix(input_string, expected_result):
-    months = r"(January|February|March|April|May|June|July|August|September|October|November|December)"
-    pattern = fr"(JP: |PAL: |EU: |NA: )?{months}"
-    
-    altered_data = re.sub(pattern, lambda m: f"{m.group(1) if m.group(1) else 'NA: '}{m.group(2)}", input_string)
-    result = re.sub(r':NA', 'NA', altered_data)
+    months = r"(January|February|March|April|May|June|July|August|September|October|November|December)"    
+    result = ItemDataProcessor.add_default_region_prefix(input_string, months)
     
     assert result == expected_result
     
@@ -78,8 +76,6 @@ def test_add_default_region_prefix(input_string, expected_result):
 ])    
 def test_simplify_searched_console_names(input_string, expected_result):
     console_names = r"(Super NES|SNES|Super Nintendo|Super Famicom)"
-    
-    string = re.sub(rf"\s*:?{console_names}\s*:", "SNES", input_string)
-    result = re.sub(console_names, "SNES", string)
+    result = ItemDataProcessor.simplify_searched_console_names(input_string, console_names)
     
     assert result == expected_result

@@ -1,7 +1,7 @@
 import pytest
 import os
 import csv
-from CSVCreator import CSVCreator
+from src.CSVCreator import CSVCreator
 from models.Item import Item
 
 class TestCSVCreator:
