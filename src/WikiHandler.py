@@ -1,3 +1,5 @@
+from datetime import datetime
+from src.ReleaseRegion import ReleaseRegion
 
 class WikiHandler:
     urls = ["https://en.wikipedia.org/wiki/Category:Super_Nintendo_Entertainment_System_games", 
@@ -23,3 +25,12 @@ class WikiHandler:
     
     def calculate_objects_count(self):
         print(f"Count of games without any date: {self.counter}")
+        
+    def parse_date(self, date_str):
+        try:
+            return datetime.strptime(date_str, "%B %d, %Y")
+        except ValueError:
+            return datetime(9999, 12, 31) #putting that item at the end of a list
+        
+    def sort_by(self, region: ReleaseRegion):
+        self.SNES_games_list.sort(key=lambda item: self.parse_date(getattr(item, region.value)))

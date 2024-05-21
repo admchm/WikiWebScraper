@@ -10,6 +10,7 @@ from models.Item import Item
 from src.ItemDataProcessor import ItemDataProcessor
 from src.WikiHandler import WikiHandler
 from src.CSVCreator import CSVCreator
+from src.ReleaseRegion import ReleaseRegion
 
 async def fetch(session, url):
     try:
@@ -46,13 +47,14 @@ def increment_counter_if_dates_are_empty(wiki_handler, single_item):
     if single_item.release_JP==TextRes.EMPTY_STRING and single_item.release_NA==TextRes.EMPTY_STRING and single_item.release_JP==TextRes.EMPTY_STRING:
         wiki_handler.counter += 1
         
-def create_file(SNES_games_list):
+def create_file(wiki_handler):
     csv_creator = CSVCreator()
     
     csv_creator.set_path("~/")
     csv_creator.set_file_name("SNES_games.csv")
+    wiki_handler.sort_by(ReleaseRegion.NA)
     
-    csv_creator.prepare_file(SNES_games_list)
+    csv_creator.prepare_file(wiki_handler.SNES_games_list)
     
 async def main():
     wiki_handler = WikiHandler()
@@ -98,6 +100,6 @@ async def main():
         print(f"Edited {len(wiki_handler.SNES_games_list)} games for {round(time.time()-start,1)} seconds")
         wiki_handler.calculate_objects_count()
         
-        create_file(wiki_handler.SNES_games_list)
+        create_file(wiki_handler)
 
 asyncio.run(main())

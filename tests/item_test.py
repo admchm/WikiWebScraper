@@ -38,8 +38,6 @@ class TestItem:
         
         assert captured.out == expected_output
         
-        #item_real = Item("Super Mario World", "SNES", "August 23, 1991", "April 11, 1992", "November 21, 1990", "https://en.wikipedia.org/wiki/Super_Mario_World")
-        
     def test_set_dates(self):
         item = Item("Super Mario World")
         dates = {
