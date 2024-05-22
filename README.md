@@ -6,8 +6,12 @@ were released for the SNES console. Next, to download the full content of the pa
 * release date in the PAL region
 * release date in JP region
 
+![Sample](./images/Sample.png)
+
 Using listed data (along with a few additional ones like unique Wiki link for specific title), the project's task is to generate a CSV file that enables obtaining complete results, 
 sorted by release date for selected region. The resulting list should allow for playing the games in chronological order.
+
+![File](./images/File.png)
 
 ## Project details
 I’ve created this project with VS Code. It should not be dependent on it, but I had to add a couple of config files that might be linked to a VS Code, so it might be advised for 
@@ -17,7 +21,8 @@ following folder hierarchy:
 - models/ - a folder consisting of files that are models
 - src/ - a folder containing files (mainly) processing data
 - tests/ - files containing unit tests
-- main directory -  includes main.py (starting point), configuration files, and samples.py, which is a good guide for using BeautifulSoup
+- main directory -  includes main.py (starting point), configuration files, and samples.py, which is a good guide for using BeautifulSoup. I've also added the catalog for images,
+                    that I used here, in readme file.
 
 ## Requirements
 * BeautifulSoup
@@ -28,6 +33,8 @@ following folder hierarchy:
 ## Unit tests
 The project is covered by unit tests at 98%. It is not large, hence such a value. On the other hand, some functionality ended up in main.py that should be separated and 
 tested (particularly regarding data retrieval from Wikipedia). 
+
+![Coverage](./images/coverage.png)
  
 ## Commands 
 
