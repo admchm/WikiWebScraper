@@ -34,7 +34,7 @@ following folder hierarchy:
 The project is covered by unit tests at 98%. It is not large, hence such a value. On the other hand, some functionality ended up in main.py that should be separated and 
 tested (particularly regarding data retrieval from Wikipedia). 
 
-![Coverage](./images/coverage.png)
+![Coverage](./images/Coverage.png)
  
 ## Commands 
 
