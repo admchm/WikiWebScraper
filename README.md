@@ -11,7 +11,7 @@ sorted by release date for selected region. The resulting list should allow for 
 
 ## Project details
 I’ve created this project with VS Code. It should not be dependent on it, but I had to add a couple of config files that might be linked to a VS Code, so it might be advised for 
-building it.  The file hierarchy is not ideal, which I will address in a second project that I will build based on WikiWebScraper. In any case, the project currently consists of the
+building it.   The file hierarchy is not ideal, which I will address in a second project that I will build based on WikiWebScraper. In any case, the project currently consists of the
 following folder hierarchy:
 - .vscode/ - a folder containing pytest configuration
 - models/ - a folder consisting of files that are models
@@ -20,10 +20,10 @@ following folder hierarchy:
 - main directory -  includes main.py (starting point), configuration files, and samples.py, which is a good guide for using BeautifulSoup
 
 ## Requirements
--BeautifulSoup
--aiohttp
--pytest
--pytest-cov
+* BeautifulSoup
+* aiohttp
+* pytest
+* pytest-cov
 
  ## Unit tests
 The project is covered by unit tests at 98%. It is not large, hence such a value. On the other hand, some functionality ended up in main.py that should be separated and 
@@ -50,5 +50,10 @@ data for each title using a single pattern. 
 Another problem is that the dates recorded on Wikipedia pages do not follow a single format. Additionally, the dates do not always include the day or month, which also had to be considered. 
 All of this made it necessary for me to use regular expressions to process the data far too extensively, which I am not happy about. Not all the data is complete, precisely due to the lack 
 of a uniform data recording standard.
+
+I aimed to develop an application where more than one platform could be selected, and a list of games could be obtained by sorting the data according to releases. 
+The data structure somewhat prevented this, so I will try to develop it in the next project, based on a different source equivalent to Wikipedia.
+Additionally, I would like to include features that were missing in WikiWebScraper—such as an architectural pattern, a UI layer (QT?), and the ability to select different platforms. 
+Furthermore, I would use more sensible regular expressions (possibly in smaller quantities).
 
 Nevertheless, I did everything to complete this project. I wanted to learn as much as possible from it and cover it with tests. Even though it is not perfect, I am satisfied with the results.
