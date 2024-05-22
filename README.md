@@ -9,13 +9,7 @@ were released for the SNES console. Next, to download the full content of the pa
 ![Sample](./images/Sample.png)
 
 Using listed data (along with a few additional ones like unique Wiki link for specific title), the project's task is to generate a CSV file that enables obtaining complete results, 
-sorted by release date for selected region. The resulting list should allow for playing the games in chronological order.
-
-Sorted by name:
-![File](./images/File.png)
-
-Sorted by North American release date:
-![File_sorted](./images/File_sorted.png)
+sorted by release date for selected region. The resulting list should allow to use it as a guide for playing the games in chronological order.
 
 ## Project details
 I’ve created this project with VS Code. It should not be dependent on it, but I had to add a couple of config files that might be linked to a VS Code, so it might be advised for 
