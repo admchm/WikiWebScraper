@@ -52,7 +52,7 @@ def create_file(wiki_handler):
     
     csv_creator.set_path("~/")
     csv_creator.set_file_name("SNES_games.csv")
-    wiki_handler.sort_by(ReleaseRegion.NA)
+    # wiki_handler.sort_by(ReleaseRegion.NA) - sorting data by selected region
     
     csv_creator.prepare_file(wiki_handler.SNES_games_list)
     
